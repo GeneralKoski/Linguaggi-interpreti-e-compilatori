@@ -1,0 +1,4 @@
+Note:
+  - si è considerata come specifica quella contenuta in una bozza dello nuovo standard
+  - non sono gestite le direttive per il preprocessore (inclusione, condizionali, espansione di macro, ecc.);
+  - non sono gestiti i "raw string literal" e i letterali definiti dall'utente

@@ -1,0 +1,51 @@
+Yet Another Toy Language
+
+ident: identificatori stile C
+int_literal: sequenza (non vuota) di cifre decimali
+
+
+Grammatica
+
+prog ::= stmts
+
+stmts ::= epsilon
+        | stmts stmt
+
+stmt ::= ;
+       | ident = aexpr;
+       | if (bexpr) stmt
+       | if (bexpr) stmt else stmt
+       | while (bexpr) stmt
+       | do stmt while (bexpr);
+       | { stmts }
+       | assert(bexpr);
+       | output aexpr;
+
+bexpr ::= bexpr or bexpr
+        | bexpr and bexpr
+        | not bexpr
+        | (bexpr)
+        | batom
+
+batom ::= aexpr < aexpr
+        | aexpr <= aexpr
+        | aexpr == aexpr
+        | aexpr != aexpr
+        | aexpr >= aexpr
+        | aexpr > aexpr
+        | false
+        | true
+
+aexpr ::= aexpr + aexpr
+        | aexpr - aexpr
+        | aexpr * aexpr
+        | aexpr / aexpr
+        | aexpr % aexpr
+        | +aexpr
+        | -aexpr
+        | (aexpr)
+        | atom
+
+atom ::= int_literal
+       | ident
+       | input [int_literal, int_literal]

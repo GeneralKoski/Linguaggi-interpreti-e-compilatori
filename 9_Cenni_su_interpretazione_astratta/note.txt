@@ -1,0 +1,4 @@
+Nelle lezioni finali del corso, si introducel'Interpretazione Astratta, formalizzata da Patrick e Radhia Cousot. Il discorso è partito da una pagina web di P. Cousot  (https://www.di.ens.fr/~cousot/AI/IntroAbsInt.html) che ne fornisce l'intuizione. Buona parte del contenuto di quella pagina web è presente, in maggiore dettaglio, in questo articolo: https://www.di.ens.fr/~cousot/publications.www/CousotCousot-Marktoberdorf-2009.pdf
+
+Ulteriori esempi intuitivi sono presenti nella parte iniziale del seguente articolo:
+    https://www.di.ens.fr/~cousot/COUSOTpapers/JLP92.shtml

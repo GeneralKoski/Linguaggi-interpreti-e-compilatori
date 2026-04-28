@@ -1,0 +1,1 @@
+Nota: si è considerato solo l'algoritmo di minimizzazione di Hopcroft
