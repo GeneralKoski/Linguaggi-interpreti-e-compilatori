@@ -1,19 +1,42 @@
 # Modalità d'esame
 
-## ⚠️ Modalità ufficiale (dalla slide del docente)
+## ⚠️ Modalità ufficiale (confermata dal docente via mail)
 
-**Esame orale** con domande aperte su tutto il programma.
+L'esame è composto da **due parti separate, in date diverse**:
 
-**In alternativa** (a scelta dello studente):
-- **Seminario di approfondimento** (max 15 minuti) su un argomento del programma, oppure
-- **Sviluppo e presentazione di un progetto software**
+### 1. Seminario (prerequisito per accedere all'orale)
+- **Presentazione con slide, ~15 minuti**
+- Argomento **concordato direttamente col docente** (Enea Zaffanella)
+- L'argomento va **individuato almeno 30 giorni prima** della data del seminario
+- **Si svolge in una data precedente all'appello**, NON nello stesso giorno dell'orale
+- Il docente **consiglia di fissare un appuntamento** per parlare dell'argomento prima di scegliere
 
-L'argomento del seminario o progetto è **assegnato dal docente, su richiesta dello studente**, **almeno 30 giorni prima dell'appello**.
+### 2. Orale
+- Esame **solo orale** con domande aperte su tutto il programma
+- Si tiene nella **data dell'appello** (giorni dopo il seminario)
+- Per accedervi è obbligatorio aver già fatto il seminario
 
-## Cosa fare in pratica
-1. **Decidi presto** se preferisci orale puro o seminario/progetto
-2. Se vuoi seminario/progetto, contatta il docente (`enea.zaffanella@unipr.it`) almeno **30+ giorni prima** della data di appello desiderata e proponi/richiedi un argomento
-3. Per l'orale "puro": preparati ad aspettarti domande su qualsiasi capitolo (lexer, parser, CSA, IR, middle end, back end, interpretazione astratta)
+### Riferimenti ufficiali
+- Documento ufficiale modalità: https://corsi.unipr.it/it/ugov/degreecourse/329435
+- Docente: Enea Zaffanella — `enea.zaffanella@unipr.it`
+- **Ricevimento:** anche **da remoto via Microsoft Teams**
+
+## Cosa fare in pratica (timeline operativa)
+
+```
+T − ≥30 gg   →  Contatta il prof e fissa un appuntamento (Teams o in presenza)
+T − ≥30 gg   →  Concorda l'argomento del seminario
+T − N gg     →  Prepara slide (~15 min di esposizione)
+T − qualche gg → Svolgi il seminario
+T (appello)  →  Esame orale
+```
+
+1. **Scrivi al prof** (`enea.zaffanella@unipr.it`) chiedendo un appuntamento Teams per discutere il seminario
+2. **Concorda l'argomento** con almeno 30 giorni di margine prima della data del seminario
+3. **Prepara le slide** (15 min di esposizione → ~10-15 slide effettive)
+4. **Svolgi il seminario** nella data fissata (precedente all'appello)
+5. **Studia per l'orale** sul resto del programma
+6. **Sostieni l'orale** alla data dell'appello
 
 ## Argomenti caldi (probabili all'orale)
 - Specifica vs implementazione del lexer (RE vs DFA), costruzione DFA da RE (Thompson + subset + Hopcroft)

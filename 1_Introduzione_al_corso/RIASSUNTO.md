@@ -28,12 +28,12 @@
 8. Analisi e ottimizzazione della IR (middle end)
 9. Introduzione all'interpretazione astratta
 
-## Modalità di esame ⚠️
-- **Esame orale** con domande aperte su tutto il programma
-- **Alternativa** (a scelta dello studente):
-  - **Seminario di approfondimento** (max 15 minuti) su un argomento del programma, oppure
-  - **Sviluppo e presentazione di un progetto software**
-- L'argomento del seminario/progetto è **assegnato dal docente**, su richiesta dello studente, **almeno 30 giorni prima dell'appello**
+## Modalità di esame ⚠️ (confermato via mail dal docente)
+L'esame è in **due parti separate, in date diverse**:
+1. **Seminario (prerequisito):** presentazione con slide ~15 min su argomento concordato col prof. Argomento da individuare **almeno 30 gg prima** della data del seminario. Il seminario si svolge **giorni prima dell'appello**, NON nella stessa data dell'orale.
+2. **Orale:** domande aperte su tutto il programma, nella data dell'appello.
+- Il docente consiglia di **fissare un appuntamento** (anche da remoto via Teams) per parlare dell'argomento del seminario.
+- Riferimento ufficiale: https://corsi.unipr.it/it/ugov/degreecourse/329435
 
 ## Note aggiuntive
 - Il corso ha forte componente teorica (linguaggi formali, automi, dataflow) e pratica (Flex, Bison, LLVM)

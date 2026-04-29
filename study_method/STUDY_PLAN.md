@@ -164,11 +164,21 @@ Solo per gli argomenti su cui ti senti debole o vuoi padroneggiare meglio.
 
 ---
 
-## 🚀 Bonus — Se vuoi davvero fare bella figura
+## 🚀 Sul seminario (obbligatorio per accedere all'orale)
 
-- Scegli **seminario o progetto** invece dell'orale puro: ti permette di prepararti su un argomento specifico in profondità (max 15 min, argomento concordato con docente almeno 30 gg prima)
-- Idee per progetto: estendere TinyP con un nuovo costrutto (array, funzioni), implementare un'analisi statica nuova, scrivere un pass LLVM di esempio
-- Idee per seminario: una tecnica di ottimizzazione moderna (PGO, LTO, autovectorization), un dominio astratto specifico (poliedri, octagons), un parser combinator
+⚠️ **Il seminario non è un'alternativa: è un prerequisito.** Va svolto in data precedente all'appello orale.
+
+- **Durata:** ~15 minuti con slide
+- **Argomento:** concordato col prof (appuntamento Teams o in presenza)
+- **Scadenza:** argomento individuato **almeno 30 gg prima** della data del seminario
+- Idee possibili:
+  - Una tecnica di ottimizzazione moderna (PGO, LTO, autovectorization, polyhedral compilation)
+  - Un dominio astratto specifico (intervals, octagons, polyhedra) con esempio di analisi
+  - Un parser combinator vs parser generato (Bison vs Parsec/nom)
+  - Implementazione di un pass LLVM custom
+  - Estendere TinyP con un nuovo costrutto (array, funzioni, tipi)
+  - Garbage collection: tecniche e trade-off
+  - JIT compilation in V8/JVM/PyPy
 
 ---
 
