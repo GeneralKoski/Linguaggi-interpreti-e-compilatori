@@ -28,11 +28,14 @@
 8. Analisi e ottimizzazione della IR (middle end)
 9. Introduzione all'interpretazione astratta
 
-## Modalità di esame ⚠️ (confermato via mail dal docente)
-L'esame è in **due parti separate, in date diverse**:
-1. **Seminario (prerequisito):** presentazione con slide ~15 min su argomento concordato col prof. Argomento da individuare **almeno 30 gg prima** della data del seminario. Il seminario si svolge **giorni prima dell'appello**, NON nella stessa data dell'orale.
+## Modalità di esame ⚠️ (sito UniPR + mail del docente)
+L'esame è in **due parti separate**:
+1. **Seminario (prerequisito):** presentazione con slide ~15 min + Q&A sull'argomento. Argomento + materiale a supporto **concordati col prof almeno 30 gg prima** della data del seminario. **Una volta svolto, dà accesso a tutti gli appelli dell'anno accademico.**
 2. **Orale:** domande aperte su tutto il programma, nella data dell'appello.
-- Il docente consiglia di **fissare un appuntamento** (anche da remoto via Teams) per parlare dell'argomento del seminario.
+
+**Valutazione: 30% seminario + 70% orale.**
+
+- Il docente consiglia di fissare un appuntamento (anche da remoto via Teams) per parlare dell'argomento.
 - Riferimento ufficiale: https://corsi.unipr.it/it/ugov/degreecourse/329435
 
 ## Note aggiuntive

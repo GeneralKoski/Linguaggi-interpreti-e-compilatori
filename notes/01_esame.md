@@ -1,20 +1,23 @@
 # Modalità d'esame
 
-## ⚠️ Modalità ufficiale (confermata dal docente via mail)
+## ⚠️ Modalità ufficiale (sito UniPR + mail del docente)
 
 L'esame è composto da **due parti separate, in date diverse**:
 
-### 1. Seminario (prerequisito per accedere all'orale)
+### 1. Seminario (prerequisito per accedere a TUTTI gli appelli dell'anno)
 - **Presentazione con slide, ~15 minuti**
-- Argomento **concordato direttamente col docente** (Enea Zaffanella)
-- L'argomento va **individuato almeno 30 giorni prima** della data del seminario
-- **Si svolge in una data precedente all'appello**, NON nello stesso giorno dell'orale
-- Il docente **consiglia di fissare un appuntamento** per parlare dell'argomento prima di scegliere
+- **Argomento + materiale a supporto** concordati col docente **almeno 30 giorni prima** della data del seminario
+- Al termine della presentazione si rispondono a **domande sull'argomento del seminario**
+- **Una volta svolto**, il seminario dà accesso a **tutti gli appelli previsti per quell'anno accademico** (non va rifatto se ti ripresenti)
+- Il docente consiglia di **fissare un appuntamento** per discutere l'argomento (anche da remoto via Microsoft Teams)
 
-### 2. Orale
-- Esame **solo orale** con domande aperte su tutto il programma
-- Si tiene nella **data dell'appello** (giorni dopo il seminario)
-- Per accedervi è obbligatorio aver già fatto il seminario
+### 2. Orale (per ogni appello a cui ti presenti)
+- **Colloquio orale** con domande aperte sugli argomenti del programma del corso
+- Si tiene nella **data dell'appello**
+
+### Valutazione finale
+- **30% seminario** (presentazione + risposte alle domande sull'argomento)
+- **70% colloquio orale**
 
 ### Riferimenti ufficiali
 - Documento ufficiale modalità: https://corsi.unipr.it/it/ugov/degreecourse/329435
@@ -24,19 +27,35 @@ L'esame è composto da **due parti separate, in date diverse**:
 ## Cosa fare in pratica (timeline operativa)
 
 ```
-T − ≥30 gg   →  Contatta il prof e fissa un appuntamento (Teams o in presenza)
-T − ≥30 gg   →  Concorda l'argomento del seminario
-T − N gg     →  Prepara slide (~15 min di esposizione)
-T − qualche gg → Svolgi il seminario
-T (appello)  →  Esame orale
+S − ≥30 gg   →  Contatta il prof, fissa appuntamento (Teams o presenza)
+S − ≥30 gg   →  Concorda argomento + materiale a supporto
+S − N gg     →  Studia a fondo l'argomento e prepara slide (~15 min)
+S            →  Svolgi il seminario + Q&A sull'argomento
+... (vale per tutti gli appelli successivi nell'anno accademico)
+T1, T2, ...  →  Sostieni l'orale a uno (o più) degli appelli
 ```
 
-1. **Scrivi al prof** (`enea.zaffanella@unipr.it`) chiedendo un appuntamento Teams per discutere il seminario
-2. **Concorda l'argomento** con almeno 30 giorni di margine prima della data del seminario
-3. **Prepara le slide** (15 min di esposizione → ~10-15 slide effettive)
-4. **Svolgi il seminario** nella data fissata (precedente all'appello)
+Dove `S` = data del seminario, `T1, T2, ...` = date degli appelli orali.
+
+1. **Scrivi al prof** chiedendo un appuntamento Teams per discutere il seminario
+2. **Concorda argomento + materiale** con almeno 30 giorni di margine
+3. **Prepara le slide** (15 min → ~10-15 slide) + studia bene l'argomento per le domande
+4. **Svolgi il seminario** (vale per tutti gli appelli dell'anno)
 5. **Studia per l'orale** sul resto del programma
-6. **Sostieni l'orale** alla data dell'appello
+6. **Sostieni l'orale** in uno degli appelli
+
+## ⚠️ Implicazioni strategiche
+
+### Il seminario "sblocca" l'anno
+Non c'è urgenza di farlo a ridosso di un appello specifico: una volta fatto, vale per **tutti gli appelli dell'a.a.**. Conviene farlo presto per:
+- togliersi il pensiero
+- avere più appelli a disposizione
+- evitare il rischio di doverlo rifare nell'anno accademico successivo
+
+### Il seminario pesa il 30%
+Non è una pura formalità. Curarlo bene può alzarti significativamente il voto finale.
+
+Esempio: se prendi 27 al seminario e 30 all'orale, il voto pesato è circa **29.1**. Se prendi 24 al seminario e 30 all'orale, scende a **28.2**.
 
 ## Argomenti caldi (probabili all'orale)
 - Specifica vs implementazione del lexer (RE vs DFA), costruzione DFA da RE (Thompson + subset + Hopcroft)
