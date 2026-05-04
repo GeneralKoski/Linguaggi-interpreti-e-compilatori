@@ -93,6 +93,57 @@ target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 @.str = private constant [6 x i8] c"Hello\00", align 1
 ```
 
+### `getelementptr` (GEP) in dettaglio
+GEP **calcola un indirizzo**, non accede mai alla memoria (niente load/store). È la sola operazione LLVM che fa aritmetica di puntatori type-aware.
+
+Sintassi: `getelementptr <ty>, <ty>* %p, <idx0>, <idx1>, ...`
+
+**Regola degli indici (il classico tranello):**
+- Il **primo indice** scorre il puntatore stesso come se fosse un array (`%p[idx0]`). Quasi sempre `0` se non si sta indicizzando un array di top-level.
+- Gli **indici successivi** scendono dentro il tipo composto: per uno `struct` selezionano il campo (devono essere costanti `i32`), per un `[N x T]` o `<N x T>` selezionano l'elemento.
+
+**Esempio numerico** su `%S = type { i32, [10 x i32], i64 }` con `%p : %S*` e accesso a `S.array[3]`:
+```llvm
+%ptr = getelementptr %S, %S* %p, i32 0, i32 1, i32 3
+```
+Layout (assumendo allineamento naturale, no padding rilevante tra i32 e [10 x i32]):
+- field 0 (`i32`)        offset 0
+- field 1 (`[10 x i32]`) offset 4 — elemento 3 è a +12 dentro l'array → offset totale `4 + 3*4 = 16`
+- field 2 (`i64`)        offset 48
+
+Il primo `0` dice "non scorrere il puntatore" (resto dentro la struct puntata). Se metti `getelementptr %S, %S* %p, i32 1` ottieni il puntatore alla **struct successiva** (offset = `sizeof(%S)`), idioma equivalente a `&p[1]` in C.
+
+**Cosa potrebbe chiedere il prof:** "se hai `%S* %p` e vuoi l'elemento k dell'array interno, quanti indici servono e cosa sono?". Risposta: tre — `0` (non scorrere il puntatore), `1` (campo array), `k` (elemento). Possibile follow-up: differenza tra `getelementptr inbounds` e senza (UB se fuori dall'oggetto allocato vs comportamento definito modulo overflow).
+
+### `invoke` vs `call` e exception handling
+- `call` = chiamata ordinaria; se la funzione chiamata fa unwind (eccezione C++ / longjmp di certi runtime) l'effetto è **undefined** dal punto di vista del frontend EH.
+- `invoke` = chiamata che può fare unwind. Aggiunge due label terminator-style:
+  ```llvm
+  %r = invoke i32 @foo(i32 %x) to label %normal unwind label %lpad
+  ```
+  - `to %normal` = ramo del ritorno normale
+  - `unwind %lpad` = ramo se la chiamata propaga un'eccezione
+- Il blocco `%lpad` deve iniziare con una `landingpad`, che descrive i tipi catturabili / cleanup e produce il `{i8*, i32}` (eccezione + selector) usato dal personality runtime (`__gxx_personality_v0` per Itanium C++ ABI).
+
+**Cosa potrebbe chiedere il prof:** "perché LLVM ha bisogno di un terminator dedicato per le chiamate che possono fare unwind?" — perché l'EH è control flow a tutti gli effetti e il CFG/dominator analysis devono vederlo esplicitamente.
+
+### Conversioni LLVM
+| Istruzione | Domini | Uso tipico |
+|---|---|---|
+| `bitcast` | stesso size, reinterpret | cambio di tipo puntatore (pre-opaque-pointers), reinterpret di vector |
+| `ptrtoint` | `ptr → iN` | hash, taggature, stampa indirizzi |
+| `inttoptr` | `iN → ptr` | rimettere un intero in un puntatore (rischioso, può inibire alias analysis) |
+| `sext` | `iN → iM`, M>N | estensione **con segno** (replica MSB) |
+| `zext` | `iN → iM`, M>N | estensione **senza segno** (zero-pad) |
+| `trunc` | `iN → iM`, M<N | tronca i bit alti |
+| `fptosi` / `fptoui` | float → int | conversione con/senza segno (round verso zero) |
+| `sitofp` / `uitofp` | int → float | conversione |
+| `fpext` / `fptrunc` | float → float | cambio precisione |
+
+**Regola pratica:** mai `bitcast` tra interi e float (usa `bitcast` con stesso size se proprio serve raw bits, ma è quasi sempre un bug); `sext` per signed `int → long`, `zext` per unsigned o per estendere `i1` (boolean) a `i32`.
+
+**Cosa potrebbe chiedere il prof:** "che differenza c'è tra `sext i1 → i32` e `zext i1 → i32`?" — `sext` produce `0` o `0xFFFFFFFF` (replica del bit di segno), `zext` produce `0` o `1`. Nei booleani vuoi quasi sempre `zext`.
+
 ---
 
 ## Procedure Abstraction (capitolo 6 EaC)
@@ -112,9 +163,64 @@ Per ogni invocazione di procedura: spazio per parametri, return address, salvata
 - **Heap** per closures e first-class functions
 
 ### Accesso a non-locali
-- **Static link:** puntatore allo scope lessicale del padre (per nesting statico)
-- **Display:** array indicizzato dal livello di scope
-- Linguaggio piatto (C/C++): nessuno dei due, basta lo stack
+- **Static link (access link):** puntatore al frame lessicalmente padre. Per accedere a una variabile di livello `k` da una procedura di livello `n`, si segue la catena `n−k` volte.
+- **Display:** array (globale o nel frame) indicizzato dal livello lessicale: `display[k]` = frame attualmente attivo del livello `k`. Accesso O(1) ma serve manutenzione su entry/exit.
+- Linguaggio piatto (C/C++): nessuno dei due, basta lo stack.
+
+**Esempio static link a 2 livelli (Pascal-like):**
+```pascal
+procedure outer;             { livello 1 }
+  var x: integer;
+  procedure middle;          { livello 2 }
+    var y: integer;
+    procedure inner;         { livello 3 }
+    begin
+      y := y + 1;            { 1 hop di static link }
+      x := x + y;            { 2 hop di static link }
+    end;
+  begin inner end;
+begin middle end;
+```
+Quando `inner` esegue `x := x + y`:
+1. carica static link dal proprio frame → punta al frame di `middle` (livello 2)
+2. carica static link da quel frame → punta al frame di `outer` (livello 1)
+3. accede a `x` come `[outer_frame + offset(x)]`
+Per `y` basta un solo hop. Il compilatore conosce a compile-time la differenza di livello tra uso e definizione e genera il numero giusto di dereferenze.
+
+In linguaggi con **closures first-class** (JS, Scheme) lo static link non basta perché un frame può sopravvivere alla procedura: si alloca su heap (capture environment) e il puntatore alla closure incapsula codice + environment.
+
+**Cosa potrebbe chiedere il prof:** "cosa succede a static link quando una funzione viene restituita come valore?" — in Pascal/Ada non si può (errore di scope), in JS/Scheme richiede heap allocation del frame catturato.
+
+### Reference counting per GC sull'assegnamento
+Strategia di gestione automatica della memoria alternativa a tracing GC: ogni oggetto sull'heap ha un contatore `rc`. Sull'assegnamento `p := q` si genera codice del tipo:
+```
+tmp := q
+if (tmp != null) tmp.rc++       // incrementa nuovo target
+if (p != null && --p.rc == 0)   // decrementa vecchio target
+    free(p)                      // se rc azzerato, libera (e cascata sui figli)
+p := tmp
+```
+**Pro:** deallocazione deterministica, no pause globali, locality friendly.
+**Contro:**
+- **Cycles problem:** un ciclo di puntatori (`a → b → a`) ha rc ≥ 1 anche se irraggiungibile → leak. Si risolve con **weak references** (riferimenti che non incrementano rc, tipici per back-pointers parent/child) o con un cycle collector ausiliario (es. CPython).
+- Costo di ogni assegnamento (incremento+decremento+possibile free).
+- Thread-safety: rc richiede operazioni atomiche → costose.
+
+Usato in: Swift (ARC), Objective-C, CPython, COM, std::shared_ptr di C++.
+
+**Cosa potrebbe chiedere il prof:** "perché Java non usa refcount?" — per i cicli e per il costo di ogni store di reference; preferisce tracing GC generazionale.
+
+### Reference vs value parameter passing
+| Modalità | Cosa si passa | Costo | Side-effect | Aliasing |
+|---|---|---|---|---|
+| **By value** | copia del dato | O(sizeof) per copia | nessuno (callee modifica la copia) | nessuno |
+| **By reference** | indirizzo del dato | O(1) (un puntatore) | callee può modificare l'originale | sì, problema serio |
+| **By value-result (copy-in/copy-out)** | copia in entrata + copia in uscita | 2× O(sizeof) | osservabile a fine call | no durante la call |
+| **By name** (Algol60) | testuale, rivalutato a ogni uso | costoso, sorprese semantiche | sì | — |
+
+**Alias problem:** se passo `f(&x, &x)` o `f(&a[i], &a[j])` con `i==j`, dentro `f` due parametri formali diversi puntano alla stessa cella. Inibisce ottimizzazioni (constant prop, CSE) perché il compilatore deve assumere che ogni store via un parametro possa modificare l'altro. C99 introduce `restrict` per promettere assenza di alias.
+
+**Cosa potrebbe chiedere il prof:** "perché Fortran è storicamente più ottimizzabile di C?" — perché il suo standard vieta l'aliasing tra parametri, quindi il compilatore può riordinare load/store liberamente.
 
 ### Linkage convention
 Stabilito da architettura (ISA), OS, compilatore (calling convention). Esempio: System V AMD64 ABI passa i primi 6 interi in `rdi, rsi, rdx, rcx, r8, r9`.
@@ -156,12 +262,68 @@ In più, gli OOL hanno **dynamic dispatch** e **scope data-centrici**.
 - Address polynomial: `&A[i,j] = base + (i * cols + j) * elemSize`
 - Stringhe: rappresentazione null-terminated vs lunghezza+buffer; SSE/AVX per copia/confronto
 
+#### Stringhe C-style vs Pascal-style
+| Aspetto | C (null-terminated) | Pascal (length-prefixed) |
+|---|---|---|
+| Layout | `[c0, c1, ..., cn-1, '\0']` | `[len, c0, c1, ..., cn-1]` (1 o più byte di prefisso) |
+| `strlen` | O(n), scansione fino a `'\0'` | O(1), legge il prefisso |
+| Lunghezza max | illimitata | limitata da bit del prefisso (Pascal classico: 255) |
+| Embedded `'\0'` | impossibile (tronca) | possibile |
+| Memoria | n+1 byte | n + sizeof(len) byte |
+| Bug famosi | buffer overrun, off-by-one, assenza terminatore | nessuno equivalente |
+
+I linguaggi moderni (Rust `String`, Java, C# `string`, std::string) usano varianti length-prefixed, spesso con SSO (small string optimization).
+
+**Cosa potrebbe chiedere il prof:** "perché `strlen` in C è O(n) e che impatto ha sulle performance?" — bisogna scorrere fino al `'\0'`, e idiomi tipo `for (i=0; i<strlen(s); i++)` diventano O(n²) (errore classico).
+
 ### Code Shape per booleani e controllo (26)
 - Numerical encoding (`0`/`1`) vs **positional encoding** (etichette di branch)
 - Short-circuit di `&&` e `||` → branch e merge
 - `if/else`: branch + due rami + merge label
 - `while`: header con test, body, branch indietro
 - `case`/`switch`: cascaded if (O(n)), binary search (O(log n)), jump table (O(1) ma richiede densità)
+
+#### Numerical vs positional encoding — quando scegliere quale
+- **Numerical encoding:** il booleano è un valore in registro (`0`/`1`). Esempio:
+  ```
+  bool b = (x < y) && (a == c);   // assegnato → si materializza il valore
+  ```
+  Codice: due `setcc`/compare, un `and`, un singolo store. **Niente branch interno**: piace al branch predictor e al pipeline.
+- **Positional encoding:** il booleano è "dove sei nel CFG" (target di branch). Esempio:
+  ```
+  if ((x < y) && (a == c)) { ... }   // controllo → short-circuit naturale
+  ```
+  Codice: `cmp x,y; jge Lfalse; cmp a,c; jne Lfalse; <then>; Lfalse: <else>`. La seconda condizione **non si valuta** se la prima è falsa (richiesto dalla semantica `&&` di C/Java).
+
+**Regola pratica:**
+- `&&`/`||` in posizione di controllo (if/while) → **positional**, è obbligatorio per short-circuit.
+- Booleano assegnato a variabile o restituito → **numerical**, evita branch e i loro misprediction.
+- Espressioni miste (es. `r = (x<y) && f()`) → il compilatore ibrida: positional per la parte short-circuit, materializzazione finale a 0/1.
+
+#### Move condizionali e istruzioni con predicato
+Per evitare branch (e relative misprediction) molte ISA offrono:
+- **x86:** famiglia `cmov` — `cmovz`, `cmovnz`, `cmovl`, `cmovge`, ... Forma: `cmovcc dst, src` esegue `dst = src` solo se la condizione è vera, altrimenti no-op (ma legge sempre `src`, quindi non protegge da segfault).
+- **ARM (AArch32):** quasi ogni istruzione ha 4 bit di **predicate** (`addeq`, `movne`, ...) → l'istruzione viene "ritirata" come no-op se il predicato è falso. AArch64 ha rimosso la predicazione generale lasciando `csel`/`csinc`/`csneg` (counterparts di cmov).
+- **Itanium / GPU:** predicazione esplicita su tutte le istruzioni.
+
+Esempio (max in C):
+```c
+int m = (a > b) ? a : b;
+```
+Compilato senza cmov: 2 branch e merge.
+Compilato con cmov:
+```
+mov  m, a
+cmp  a, b
+cmovl m, b      ; se a < b, m ← b
+```
+Lineare, niente branch.
+
+**Trade-off:**
+- **Pro:** elimina misprediction su pattern data-dependent imprevedibili (es. selezione tra due valori in un loop tight).
+- **Contro:** entrambi i path vengono **eseguiti** (almeno la load del src) → se uno dei due è costoso (chiamata, divisione) o pericoloso (deref di puntatore potenzialmente null) il branch resta migliore. Anche su rami molto sbilanciati il predittore vince.
+
+**Cosa potrebbe chiedere il prof:** "quando preferiresti un `cmov` a un `if`?" — quando la condizione è imprevedibile e i due rami sono cheap e side-effect free. "E quando NO?" — quando uno dei rami è una chiamata a funzione, una divisione, o un memory access che potrebbe faultare.
 
 ---
 

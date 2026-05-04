@@ -64,7 +64,7 @@ UEVar e VarKill:
 
 LiveOut iterativo (dal exit):
 - LiveOut(BB6) = ∅ → LiveIn(BB6) = {x}
-- LiveOut(BB4) = LiveIn(BB6) = {x} → LiveIn(BB4) = {x} ∪ ({x}\{x}) = {c}... wait, è `UE ∪ (LiveOut \ Kill) = {c} ∪ ({x}\{x}) = {c}`
+- LiveOut(BB4) = LiveIn(BB6) = {x} → LiveIn(BB4) = `UE ∪ (LiveOut \ Kill)` = {c} ∪ ({x}\{x}) = {c}
 - LiveOut(BB5) = {x} → LiveIn(BB5) = {c}
 - LiveOut(BB3) = LiveIn(BB4) ∪ LiveIn(BB5) = {c} → LiveIn(BB3) = {c} ∪ ({c}\∅) = {c}
 - LiveOut(BB2) = {c} → LiveIn(BB2) = {a,b} ∪ ({c}\{c}) = {a,b}

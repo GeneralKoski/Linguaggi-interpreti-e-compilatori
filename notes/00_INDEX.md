@@ -11,6 +11,7 @@ Cartella di appunti riassuntivi e materiale di preparazione per l'esame.
 - `05_pipeline_compilatore.md` — il flusso completo, dalla sorgente al binario
 - `06_dataflow.md` — analisi dataflow: framework comune e problemi classici
 - `07_strumenti.md` — Flex/Bison/LLVM/Clang: comandi essenziali
+- `08_parsing.md` — analisi sintattica: CFG, LL(1), LR(1), conflitti, LALR/Bison
 
 ## Riassunti per cartella (nelle rispettive directory)
 - `1_Introduzione_al_corso/RIASSUNTO.md`

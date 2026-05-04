@@ -37,7 +37,7 @@ Parole chiave, identificatori, costanti (int/float/char/string), operatori, punt
 ### Esempi di RE
 - Identificatori: `[a-zA-Z_]([a-zA-Z_]|[0-9])*`
 - Interi: `[0-9]+` (attenzione: accetta `000000`, non gestisce il segno; il segno va spesso al parser)
-- Float: `[+-]?[0-9]+\.[0-9]*` (problema con priorità di `+`)
+- Float: `[+-]?[0-9]+\.[0-9]*` (il segno è opzionale; nelle classi `[+-]` il `+` è letterale, non quantificatore. Spesso si lascia il segno al parser per evitare ambiguità con espressioni binarie come `a+1`)
 - Char: `'[^']'` (come si codifica `'\''`?)
 - Commento C++ riga: `//[^\n]*\n`
 - Commento multiriga (C/C++/Java/SQL): `/\*([^*]|\*+[^/*])*\*+/` — corretto ma illeggibile, meglio start state in Flex.
@@ -93,7 +93,9 @@ W = {F, S-F};  P = {F, S-F}
 while W ≠ ∅:
    estrai s ∈ W
    for each c ∈ Σ:
-      I = δ⁻¹(s, c)             // pre-immagine: stati che vanno su s leggendo c
+      I = δ⁻¹(s, c)             // pre-immagine della classe s su c:
+                                // I = { q ∈ Q | δ(q, c) ∈ s }
+                                // (insieme degli stati che leggendo c finiscono dentro la classe s)
       for each p ∈ P:
          if p ∩ I ≠ ∅ and p \ I ≠ ∅:
             split p in p1 = p ∩ I, p2 = p \ I

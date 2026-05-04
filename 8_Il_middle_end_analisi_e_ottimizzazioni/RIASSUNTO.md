@@ -93,15 +93,17 @@ Forma di **ragionamento a compile-time sui valori a run-time**. Si formula come 
 ### Live Variables (esempio canonico, problema backward)
 `v` è **live** in `p` se esiste un cammino da `p` a un uso di `v` lungo cui `v` non viene ridefinita.
 
-**Equazioni:**
+**Equazioni** (forma standard con set difference `\`):
 ```
 LiveOut(nf) = ∅       (exit node)
-LiveOut(n) = ∪_{m ∈ succ(n)} ( UEVar(m) ∪ (LiveOut(m) ∩ ¬VarKill(m)) )
+LiveOut(n) = ⋃_{m ∈ succ(n)} ( UEVar(m) ∪ (LiveOut(m) \ VarKill(m)) )
 ```
 - `UEVar(n)` = nomi usati prima di essere definiti in `n` (Upward-Exposed)
 - `VarKill(n)` = nomi definiti in `n`
+- direzione: **backward** (LiveOut dipende dai successori)
+- meet operator: **∪** (un nome è live se lo è in *qualche* successore)
 
-**Risolutore:**
+**Risolutore (worklist o round-robin):**
 ```
 inizializza tutti i LiveOut = ∅
 ripeti:
@@ -109,7 +111,7 @@ ripeti:
         ricalcola LiveOut(n)
 finché qualcosa cambia
 ```
-Le equazioni sono **monotone crescenti** su insieme finito → terminazione garantita; soluzione di **massimo punto fisso** unica.
+La funzione di trasferimento è **monotona** su lattice finito (powerset) → terminazione garantita per Knaster-Tarski; partendo da ∅ si converge al **minimo punto fisso (lfp)**, che corrisponde al "least solution" cercato.
 
 **Applicazioni di Live:** trovare variabili usate prima di inizializzazione (errore logico), eliminare store dead, register allocation (interferenza).
 
@@ -121,6 +123,125 @@ Le equazioni sono **monotone crescenti** su insieme finito → terminazione gara
 ### Backward problems
 - **Live variables**
 - **Very busy expressions / Anticipability**
+
+### Available Expressions in dettaglio
+Un'espressione `e = x op y` è **available** in un punto `p` se su **ogni** cammino dall'entry a `p` è stata calcolata e né `x` né `y` sono stati ridefiniti dopo l'ultimo calcolo.
+
+**Equazioni** (forward, meet = ⋂):
+```
+AvailIn(entry) = ∅
+AvailIn(n)     = ⋂_{m ∈ pred(n)} AvailOut(m)        per n ≠ entry
+AvailOut(n)    = DEExpr(n) ∪ ( AvailIn(n) \ ExprKill(n) )
+```
+- `DEExpr(n)` = Downward-Exposed expressions: espressioni calcolate in `n` i cui operandi non vengono ridefiniti più tardi nello stesso BB
+- `ExprKill(n)` = espressioni "killate" in `n` (qualcuno dei loro operandi viene ridefinito)
+- **Init del resto:** `AvailIn(n) = U` (universo di tutte le espressioni) — è cruciale: con ⋂ partire da ∅ darebbe il punto fisso banale, si vuole il **massimo** punto fisso (le espressioni che resistono su tutti i cammini)
+
+**Esempio piccolo (4 BB, diamond):**
+```
+B1: a = x + y          DEExpr={x+y}     ExprKill=∅
+    ↓
+B2: b = x + y          DEExpr={x+y}     ExprKill=∅
+    ↓
+B3: x = 1              DEExpr=∅         ExprKill={x+y, x+...}
+    ↓
+B4: c = x + y          DEExpr={x+y}     ExprKill=∅
+```
+Path lineare, dopo iterazione:
+- `AvailIn(B2) = {x+y}` → in `B2` posso evitare di ricalcolare `x+y` (riuso `a`)
+- `AvailIn(B3) = {x+y}` ma `B3` killa → `AvailOut(B3) = ∅`
+- `AvailIn(B4) = ∅` → `x+y` in B4 va calcolato di nuovo (giusto: `x` è cambiato)
+
+**Uso: GCSE (Global Common Subexpression Elimination).**
+Algoritmo:
+1. Calcola `AvailIn` per ogni BB.
+2. Per ogni occorrenza di `e = x op y` nel BB `n` con `e ∈ AvailIn(n)` (o disponibile a metà BB): trova le definizioni "fonte" (su tutti i predecessori).
+3. Sostituisci con un nome temporaneo `t` definito alle fonti, e usa `t` qui.
+
+GCSE **non** cattura ridondanze parziali (su solo alcuni cammini): per quelle serve **PRE (Partial Redundancy Elimination)**, di cui Lazy Code Motion è la formulazione classica.
+
+**Cosa potrebbe chiedere il prof:** "perché `AvailIn` si inizializza a U e non a ∅?" — perché il meet è ⋂ e si vuole il greatest fixed point; ∅ è già un punto fisso banale ma non informativo.
+
+### Very Busy Expressions in dettaglio
+Un'espressione `e` è **very busy** (anticipabile) all'uscita di `n` se su **ogni** cammino da `n` all'exit `e` viene calcolata **prima** che i suoi operandi vengano ridefiniti. Intuizione: è certo che la calcoleremo, allora tanto vale anticiparla.
+
+**Equazioni** (backward, meet = ⋂):
+```
+VeryBusyOut(exit) = ∅
+VeryBusyOut(n)    = ⋂_{m ∈ succ(n)} VeryBusyIn(m)
+VeryBusyIn(n)     = UEExpr(n) ∪ ( VeryBusyOut(n) \ ExprKill(n) )
+```
+- `UEExpr(n)` = Upward-Exposed expressions: espressioni usate in `n` prima che i loro operandi siano ridefiniti dentro `n`
+- Init resto: `VeryBusyOut(n) = U`
+
+**Esempio (diamond):**
+```
+        B1
+       /   \
+     B2     B3
+     y=a+b  z=a+b
+       \   /
+        B4
+```
+Sia `B2` che `B3` calcolano `a+b`. Allora `a+b ∈ VeryBusyOut(B1)`: certamente sarà calcolata in qualunque cammino.
+
+**Uso: code hoisting.** Si solleva il calcolo di `a+b` in `B1`:
+```
+B1: t = a + b
+B2: y = t        (sostituita)
+B3: z = t        (sostituita)
+```
+Vantaggi: riduzione code size (un calcolo invece di due), niente perdita di performance se entrambi i rami sono certi. **Attenzione:** NON è una "speculation" — la very busy garantisce che il calcolo sarebbe avvenuto comunque. Per espressioni potenzialmente faulty (divisione, deref) bisogna ulteriore analisi (anticipability + safety).
+
+**Cosa potrebbe chiedere il prof:** "differenza tra hoisting via very busy e loop-invariant code motion?" — LICM solleva fuori da un loop un calcolo invariante (anche se in teoria potrebbe non eseguirsi mai); very busy hoisting solleva tra blocchi su un join, garantendo che il calcolo era inevitabile.
+
+### Induction Variables e Strength Reduction
+Una **induction variable** (IV) è una variabile che in ogni iterazione di un loop viene incrementata di una costante. Forme:
+- **Basic IV:** `i = i + c` (con `c` costante invariante nel loop)
+- **Derived IV:** `j = a*i + b` con `a, b` invarianti — funzione affine di una basic IV
+
+**Identificazione:** sul CFG ridotto al loop body, una variabile è basic IV se la sua sola definizione nel loop è del tipo `i := i ± c`. Si itera per scoprire le derived: `j := a*i + b` o `j := j ± c'` dove c' è invariante.
+
+**Strength reduction:** sostituisci operazioni costose con equivalenti più economiche sfruttando la regolarità della IV. Esempio canonico:
+```c
+for (i = 0; i < n; i++) a[i] = 0;
+```
+Naïve: ogni iterazione calcola `&a[i] = &a + i*4` → moltiplicazione per ogni iterazione. Dopo strength reduction:
+```c
+p = &a;
+for (i = 0; i < n; i++) { *p = 0; p += 4; }
+```
+La moltiplicazione è sostituita da un'addizione (più una init). Combinato con **IV elimination** si può anche eliminare `i` se non serve a nulla, usando solo `p` e un `p_end`:
+```c
+for (p = &a, end = &a + 4*n; p < end; p += 4) *p = 0;
+```
+
+**Cosa potrebbe chiedere il prof:** "perché strength reduction è importante anche su CPU moderne dove la moltiplicazione è veloce?" — perché abilita **vectorization** e **address mode folding**, e perché su loop tight ogni ciclo conta. Inoltre su array indexing è il prerequisito per riconoscere stride patterns.
+
+### Dead Code Elimination (DCE)
+**Idea:** un'istruzione che definisce una variabile `v` e non ha side-effect è inutile se `v` non è live dopo l'istruzione. Usa l'analisi di **liveness** (backward, già descritta).
+
+**Algoritmo iterativo:**
+```
+ripeti:
+    calcola LiveOut per ogni BB
+    per ogni istruzione I = "v := expr" senza side-effect:
+        se v ∉ Live dopo I:  rimuovi I
+finché nessuna rimozione
+```
+Iterativo perché rimuovere `v := w + 1` può rendere dead un precedente `w := ...` (se `w` non è più usato). Le istruzioni con side-effect (store, call a funzione potenzialmente impura, I/O, volatile) **non** si rimuovono mai per DCE puro.
+
+**Versione SSA-based aggressive (ADCE, Aggressive Dead Code Elimination):** parte assumendo morto tutto e marca live solo ciò che è raggiungibile a ritroso da istruzioni "essenziali" (return, store, call con side-effect, branch). Ribalta il default ed elimina anche cicli di codice morto auto-sostenuto (es. `i := i+1` non usato).
+
+**Cosa potrebbe chiedere il prof:** "perché DCE va iterato?" — perché è **monotono ma non one-shot**: ogni rimozione riduce il live set e può rendere dead altre istruzioni. Convergenza garantita: il numero di istruzioni decresce strettamente, è finito.
+
+### Pass LLVM standard (cosa fanno)
+- **mem2reg** (`-mem2reg`, oggi parte di `-sroa`): promuove le `alloca` di scalari (locali con indirizzo non preso) a registri SSA, inserendo le `φ`. Frontend Clang emette tutte le locali come alloca/load/store; mem2reg trasforma in IR SSA "vera". È il **gateway pass:** quasi tutte le ottimizzazioni successive lavorano molto meglio dopo mem2reg.
+- **SROA (Scalar Replacement of Aggregates):** spezza `alloca` di struct/array in tante alloca di campi/elementi separati, poi promuove ognuno a registro (chiama mem2reg internamente). Esempio: `struct Point { int x, y; }` locale → due variabili scalari `x`, `y` indipendenti, i `getelementptr` spariscono.
+- **instcombine:** **peephole** sull'IR. Centinaia di pattern di riscrittura locali: `x + 0 → x`, `x * 2 → x << 1`, fusione di `zext`+`shl`, semplificazione di compare, canonicalizzazione (es. costante a destra). È il pass più "tattico" di LLVM e gira spesso (alternato con simplifycfg).
+- **LICM (Loop-Invariant Code Motion):** identifica istruzioni dentro un loop i cui operandi sono invarianti (definiti fuori dal loop o tutti loop-invariant) e le solleva nel **preheader**. Richiede che l'istruzione sia safe-to-speculate (no side-effect, o dominanza dell'exit). Combinato con la promozione di load/store invarianti su memoria che non aliasa (loop-invariant memory motion).
+
+**Cosa potrebbe chiedere il prof:** "perché LLVM fa generare al frontend tutte le locali come alloca anziché direttamente in SSA?" — perché generare SSA da un AST richiede dominator + φ-placement; è molto più semplice emettere alloca/load/store e lasciare a mem2reg il lavoro (separazione di concerns frontend/middle-end).
 
 ### Velocità di convergenza
 Dipende dall'ordine di visita: per backward problems conviene ordine **post-order del reverse CFG** (post-order del CFG visitato al rovescio).

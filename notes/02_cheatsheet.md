@@ -53,7 +53,8 @@ Forme di parsing:
 - `d dom n` se ogni cammino entry→n passa per d
 - `idom(n)` = dominator immediato (esiste unico)
 - Dominator tree: padre di n = idom(n)
-- Equazioni: `DOM(n0) = {n0}`, `DOM(n) = {n} ∪ ⋂_{p ∈ pred(n)} DOM(p)`
+- Equazioni: `DOM(n0) = {n0}`, `DOM(n) = {n} ∪ ⋂_{p ∈ pred(n)} DOM(p)` per `n ≠ n0`
+- **Init algoritmo iterativo:** `DOM(n) = N` (tutti i nodi) per `n ≠ n0`, poi convergenza per intersezione (max fixed point). Se inizializzi a ∅ l'algoritmo non converge correttamente.
 
 ## Live Variables (DFA backward)
 ```
@@ -71,9 +72,27 @@ ReachIn(n) = ⋃_{p ∈ pred(n)} ReachOut(p)
 ## Available Expressions (DFA forward, ⋂)
 ```
 AvailIn(entry) = ∅
+AvailOut(n)    = U  per ogni n ≠ entry  (init = universo, perché meet è ⋂)
 AvailOut(n) = Expr(n) ∪ (AvailIn(n) \ Kill(n))
-AvailIn(n) = ⋂_{p ∈ pred(n)} AvailOut(p)
+AvailIn(n)  = ⋂_{p ∈ pred(n)} AvailOut(p)
 ```
+**Nota init:** con meet ⋂, l'identità del lattice (top) è l'**universo U** delle espressioni; entry parte da ∅ perché niente è "available" prima del programma. Si converge al **massimo punto fisso** rispetto a ⊑ = ⊇ (più espressioni = più informazione utile).
+
+## Very Busy Expressions (DFA backward, ⋂)
+Espressione `e` è "very busy" all'uscita di n se sarà valutata su **ogni** cammino fino all'uso (senza essere ridefinita). Usata per **code hoisting** (anticipare valutazioni → registro liberato prima).
+```
+VBOut(exit) = ∅;  VBIn(n) = U per n ≠ exit
+VBIn(n)  = Expr(n) ∪ (VBOut(n) \ Kill(n))
+VBOut(n) = ⋂_{s ∈ succ(n)} VBIn(s)
+```
+
+## Riepilogo direzione/meet delle 4 DFA classiche
+| Analisi | Direz. | Meet | Init non-boundary | Punto fisso |
+|---|---|---|---|---|
+| Live Variables | back | ∪ | ∅ | min |
+| Reaching Defs | fwd | ∪ | ∅ | min |
+| Available Expr | fwd | ⋂ | U | max |
+| Very Busy Expr | back | ⋂ | U | max |
 
 ## Convergenza dataflow
 - Lattice `(L, ⊑)` finito + funzione di trasferimento monotona ⇒ punto fisso esiste
