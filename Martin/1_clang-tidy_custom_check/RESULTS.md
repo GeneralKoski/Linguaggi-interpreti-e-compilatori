@@ -30,3 +30,20 @@ warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' [misc-n
 ### Punto chiave per il seminario
 
 Sui tre casi "non triviali" (scope, macro, template) un linter **testuale** o un LLM che ragiona per pattern di stringa sbaglierebbe: il vantaggio decisivo di clang-tidy è lavorare sull'**AST arricchito di semantica** (scope risolti, macro espanse, template istanziati).
+
+## Run su progetto multi-file con Bear (`bear_demo/`)
+
+Build esistente intercettata con `bear -- make`, poi clang-tidy lanciato con `-p .` sul `compile_commands.json` generato.
+
+| File | printf veri | hit clang-tidy |
+|------|------------|----------------|
+| main.cpp | 2 | 2 ✅ |
+| logger.cpp | 2 | 2 ✅ |
+| net.cpp | 1 | 1 ✅ |
+| util.cpp | 0 (file pulito) | 0 ✅ |
+
+Output integrale: `bear_demo/run_output.txt`. Totale: **5/5 hit**, 0 falsi positivi.
+
+### Punto chiave Bear
+
+Il `Makefile` non sa nulla di clang-tidy: Bear si **intercetta sopra** la build esistente e produce il database. Per il seminario è il pattern realistico: un team eredita un progetto con build proprio (Make/CMake/Bazel) e vuole aggiungerci un linter senza toccare il sistema di build.

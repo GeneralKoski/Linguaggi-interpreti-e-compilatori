@@ -1,0 +1,20 @@
+logger.cpp:6:34: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+    6 | void log_info(const char *msg) { printf("[INFO] %s\n", msg); }
+      |                                  ^~~~~~
+      |                                  std::print
+logger.cpp:7:33: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+    7 | void log_err(const char *msg) { printf("[ERR ] %s\n", msg); }
+      |                                 ^~~~~~
+      |                                 std::print
+main.cpp:7:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+    7 |   printf("avvio app, argc=%d\n", argc);
+      |   ^~~~~~
+      |   std::print
+main.cpp:10:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   10 |   printf("fine\n");
+      |   ^~~~~~
+      |   std::print
+net.cpp:7:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+    7 |   printf("connecting to %s:%d\n", host, port);
+      |   ^~~~~~
+      |   std::print
