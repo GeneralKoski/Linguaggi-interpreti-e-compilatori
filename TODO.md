@@ -19,11 +19,7 @@ Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_
 
 ## 🎯 Da fare — in ordine di priorità
 
-### 1. Mail al prof (~30 min) — **fai subito, parte timer 30gg**
-- Proporre una data tentativa per il seminario
-- Confermare scope (clang-tidy custom check) e che integro le 3 richieste fatte all'incontro
-
-### 2. Confronto LLM reale (~1-2h) — solo tu
+### 1. Confronto LLM reale (~1-2h) — solo tu
 Tutto pronto in `Martin/1_clang-tidy_custom_check/comparison/`:
 - Leggi `llm_responses/_PROMPT.md` per la procedura
 - Apri 8 chat fresche (4 snippet × Claude Opus 4.7 + ChatGPT 5.5)
@@ -32,6 +28,14 @@ Tutto pronto in `Martin/1_clang-tidy_custom_check/comparison/`:
 - Riempi tabella in `comparison/COMPARISON.md`
 - Identifica il "wow moment" (probabilmente snippet 02 o 03)
 - Commit + spunta riga in TODO interno
+
+### 2. Mail al prof (~30 min) — tra ~2 settimane (intorno al 2026-05-18)
+Incontro fatto oggi 2026-05-04: scrivere subito sa di "non ho fatto nulla, dammi una data". Tra 2 settimane invece arrivi con il check già funzionante e una proposta concreta.
+
+Cosa scrivere:
+- Riassumere brevemente cosa è stato fatto (check `misc-no-printf` operativo, lit test PASS, run reali su `fmt`/`tinyxml2`, demo Bear pronto)
+- Proporre 1-2 date tentative (preavviso ≥ 30 giorni)
+- Chiedere se preferisce slide via mail prima per controllo
 
 ### 3. Slide vere (~6-8h)
 - Convertire `SLIDES.md` in slide vere: tool consigliato **Marp** (markdown → PDF, comodo da terminale)
@@ -100,9 +104,9 @@ Per ogni lezione: leggi `RIASSUNTO.md` → apri PDF docente → "Punti chiave pe
 ## 📅 Ordine di lavoro suggerito
 
 ```
-Sett. corrente : mail al prof + confronto LLM
+Sett. corrente : confronto LLM + inizio bozza slide
 +1             : slide + diagramma
-+2             : script + demo cronometrata + video backup
++2             : MAIL AL PROF + script + demo cronometrata + video backup
 +3             : studio orale lez 1-5
 +4             : studio orale lez 6-9 + cheatsheet
 +5             : SEMINARIO + 44 domande
