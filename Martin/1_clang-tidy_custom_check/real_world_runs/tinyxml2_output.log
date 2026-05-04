@@ -1,0 +1,116 @@
+[1/2] Processing file /Users/martintrajkovski/tinyxml2-test/tinyxml2.cpp.
+1 warning generated.
+[2/2] Processing file /Users/martintrajkovski/tinyxml2-test/xmltest.cpp.
+52 warnings generated.
+/Users/martintrajkovski/tinyxml2-test/tinyxml2.cpp:2568:5: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+ 2568 |     printf("%s\n", ErrorStr());
+      |     ^~~~~~
+      |     std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:40:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   40 |                 printf ("[pass]");
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:42:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   42 |                 printf ("[fail]");
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:45:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   45 |                 printf (" %s\n", testString);
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:49:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   49 |                         printf( " %s\n", testString );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:50:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   50 |                         printf( "%s\n", expected );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:51:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   51 |                         printf( "%s\n", found );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:54:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   54 |                         printf (" %s [%s][%s]\n", testString, expected, found);
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:79:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   79 |                 printf ("[pass]");
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:81:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   81 |                 printf ("[fail]");
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:84:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   84 |                 printf (" %s\n", testString);
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:92:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+   92 |                 printf (" %s [%s][%s]\n", testString, expectedAsString, foundAsString );
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:166:2: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  166 |         printf( "Name of play (1): %s\n", title );
+      |         ^~~~~~
+      |         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:170:2: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  170 |         printf( "Name of play (2): %s\n", title );
+      |         ^~~~~~
+      |         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:261:2: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  261 |         printf( "Both values are the same: %d and %d\n", v0, v1 );
+      |         ^~~~~~
+      |         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:325:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  325 |                 printf( "Test file '%s' loaded. ErrorID=%d\n", argv[1], errorID );
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:327:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  327 |                         printf( "Load time=%u\n",   static_cast<unsigned>(loadTime - startTime) );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:328:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  328 |                         printf( "Delete time=%u\n", static_cast<unsigned>(deleteTime - loadTime) );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:329:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  329 |                         printf( "Total time=%u\n",  static_cast<unsigned>(deleteTime - startTime) );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:336:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  336 |                 printf( "Error opening test file 'dream.xml'.\n"
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:378:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  378 |                         printf( "----------------------------------------------\n" );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:517:4: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  517 |                         printf( "%s", streamer.CStr() );
+      |                         ^~~~~~
+      |                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:717:6: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  717 |                                         printf( "verify:%s<\n", verifyBuf );
+      |                                         ^~~~~~
+      |                                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:718:6: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+  718 |                                         printf( "saved :%s<\n", savedBuf );
+      |                                         ^~~~~~
+      |                                         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:2519:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+ 2519 |                 printf("%s\n", printer.CStr());
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:2671:6: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+ 2671 |         printf("%s\n", doc.ErrorStr());
+      |         ^~~~~~
+      |         std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:2792:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+ 2792 |                 printf("\nParsing dream.xml (%s): %.3f milli-seconds\n", note, duration);
+      |                 ^~~~~~
+      |                 std::print
+/Users/martintrajkovski/tinyxml2-test/xmltest.cpp:2810:2: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' (richiede #include <print> e C++23) [misc-no-printf]
+ 2810 |         printf ("\nPass %d, Fail %d\n", gPass, gFail);
+      |         ^~~~~~
+      |         std::print

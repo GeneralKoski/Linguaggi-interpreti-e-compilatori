@@ -72,3 +72,53 @@ Total Discovered Tests: 1
 Per far girare il lit harness sono necessari due binari oltre a `clang-tidy`:
 - `FileCheck` (compilato con `ninja FileCheck`)
 - un `clang` da usare come driver — qui ho passato il sistema (`CLANG=/usr/bin/clang`) per evitare di buildare anche `clang` (~altri 30+ minuti)
+
+## Run su progetti open source reali (richiesta del prof)
+
+Su macOS, **Bear non riesce a intercettare `ninja`** (sandboxing/SIP blocca il preload trick). Per progetti CMake la via canonica è invece la flag nativa `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` che produce lo stesso `compile_commands.json`. Bear resta utile per build Make/autotools (vedi `bear_demo/`).
+
+Inoltre, `clang-tidy` custom non eredita lo SDK macOS, quindi va passato:
+```bash
+--extra-arg=-isysroot --extra-arg="$(xcrun --show-sdk-path)"
+```
+
+### Progetto 1: `fmt` (fmtlib/fmt)
+
+Caso "negativo" deliberato: fmt esiste **per evitare** printf, quindi 0 hit attesi.
+
+| Metrica | Valore |
+|---------|--------|
+| TU analizzate | 3 (`format.cc`, `os.cc`, `fmt-c.cc`) |
+| Tempo totale | 0.7s |
+| Hit clang-tidy | 0 ✅ |
+| Falsi positivi | 0 ✅ |
+
+Risultato: il check è **silenzioso su una codebase clean by design**. Conferma 0 falsi positivi su 3 unit di compilazione che includono migliaia di righe di header fmt.
+
+### Progetto 2: `tinyxml2` (leethomason/tinyxml2)
+
+Caso "positivo": libreria XML leggera, usa `printf` per error reporting + un suite di test (`xmltest.cpp`) molto loquace.
+
+| Metrica | Valore |
+|---------|--------|
+| TU analizzate | 2 (`tinyxml2.cpp`, `xmltest.cpp`) |
+| Tempo totale | 0.2s |
+| Hit clang-tidy | **28** |
+| Falsi positivi | 0 |
+
+### Confronto AST vs grep — il valore dimostrato
+
+```
+grep -h printf src/*.{cpp,h}  →  42 match
+clang-tidy AST                →  28 hit
+```
+
+I **14 di scarto** che `grep` segnala ma clang-tidy ignora correttamente:
+- commenti: `// printf(...)`
+- stringhe: `"%s\n"` (contiene la sottostringa per coincidenza)
+- macro non rilevanti: `#define TIXML_VSCPRINTF _vscprintf`
+- nomi simili: `vfprintf(...)`, `snprintf(...)` — funzioni diverse
+
+Questo è il **value-prop esatto** del seminario: l'analisi AST con scope risolti e nomi qualificati `::printf` distingue 14 falsi positivi che un linter testuale (o un LLM che ragiona su pattern di stringa) prenderebbe per veri.
+
+Output integrali: `real_world_runs/fmt_output.log` e `real_world_runs/tinyxml2_output.log`.

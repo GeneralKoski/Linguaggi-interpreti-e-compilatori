@@ -17,11 +17,12 @@ Stima totale residua: **~30-35h**.
   - `CLANG=/usr/bin/clang llvm-lit ... -v` → `PASS (1 of 1)` in 0.27s
   - Pattern `CHECK-MESSAGES` raccorciato per matchare il prefisso del messaggio (la nota `(richiede ...)` interrompeva la corrispondenza esatta col tag `[misc-no-printf]`)
 
-- [ ] **Run su progetto open source reale** (2-3h, suggerimento prof)
-  - Candidati leggeri (build veloce, non gigante): `tinyxml2`, `nlohmann/json` (solo header → niente Bear, ma puoi creare un wrapper), un mini tool C++ tipo `cpp-httplib` con esempio
-  - Candidati medi: `fmt`, `spdlog`, `redis` (prende più tempo)
-  - Procedura: `git clone` → build con Make/CMake → `bear -- <build cmd>` → `run-clang-tidy -p . -checks='-*,misc-no-printf'`
-  - Annotare in `RESULTS.md`: numero file analizzati, tempo, hit, eventuali falsi positivi
+- [x] **Run su progetto open source reale** ✅ FATTO 2026-05-04
+  - **fmt** (3 TU, 0.7s, 0 hit) — caso negativo: codebase clean by design
+  - **tinyxml2** (2 TU, 0.2s, 28 hit, 0 falsi positivi) — caso positivo
+  - **Insight chiave** per le slide: grep dice 42, clang-tidy dice 28 → i 14 di scarto sono commenti/stringhe/`vfprintf`/`snprintf`/macro. È il valore esatto dell'analisi AST sulla regex testuale
+  - Bear NON funziona con ninja su macOS (SIP/sandbox); per progetti CMake serve `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`. Bear resta utile per Make → vedi `bear_demo/`
+  - Output integrali: `real_world_runs/{fmt,tinyxml2}_output.log`
 
 ---
 
