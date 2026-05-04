@@ -12,8 +12,8 @@ Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_
 - Run reali: `fmt` (0/0), `tinyxml2` (28/0 falsi positivi)
 - Bear demo Make funzionante (5/5)
 - Documentazione `.rst` ufficiale del check + entry in `list.rst`
-- Bozza slide testuale (`SLIDES.md`, 13 slide)
 - **Confronto LLM reale completato (2026-05-05)**: 6 snippet × 2 modelli × 2 chat fresche = 24 run. Wow moment confermato sullo snippet 06 (overload resolution): clang-tidy 100% deterministico, LLM 50/50 sul finding chiave. Vedi `Martin/1_clang-tidy_custom_check/comparison/COMPARISON.md`.
+- **Slide v1 (2026-05-05)**: `SLIDES.md` riscritto con frontmatter Marp + tema custom, esportato in `SLIDES.pdf` 13 pagine. Diagramma architettura inline a 7 box colorati. Resta solo un pass di review a freddo.
 
 ---
 
@@ -36,12 +36,8 @@ Cosa scrivere:
 - Proporre 1-2 date tentative (preavviso ≥ 30 giorni)
 - Chiedere se preferisce slide via mail prima per controllo
 
-### 3. Slide vere (~6-8h)
-- Convertire `SLIDES.md` in slide vere: tool consigliato **Marp** (markdown → PDF, comodo da terminale)
-- Diagramma slide 3 (frontend Clang → AST → matchers → check) — Excalidraw o tldraw
-- Font monospace per il codice: JetBrains Mono o Fira Code
-- Colore d'accento per le righe chiave dei matcher
-- Export in PDF
+### ~~3. Slide vere~~ ✅ v1 FATTA 2026-05-05
+`SLIDES.md` con frontmatter Marp + tema custom (palette blu/rosso/verde, JetBrains Mono, gradient cover); diagramma architettura inline (HTML+CSS, 7 box colorati); export `SLIDES.pdf` 13 pagine. Resta solo un pass di review a freddo prima di mandarle al prof.
 
 ### 4. Demo cronometrata (~3-4h)
 - Terminale dedicato: prompt corto, font ≥ 18pt, sfondo chiaro
@@ -103,9 +99,9 @@ Per ogni lezione: leggi `RIASSUNTO.md` → apri PDF docente → "Punti chiave pe
 ## 📅 Ordine di lavoro suggerito
 
 ```
-Sett. corrente : Fase 1 100% chiusa, partire con bozza slide
-+1             : slide + diagramma
-+2             : MAIL AL PROF + script + demo cronometrata + video backup
+Sett. corrente : Fase 1 100% chiusa, slide v1 fatte — script verbale + review a freddo
++1             : demo cronometrata + video backup + pass review slide
++2             : MAIL AL PROF + eventuali rifiniture slide
 +3             : studio orale lez 1-5
 +4             : studio orale lez 6-9 + cheatsheet
 +5             : SEMINARIO + 44 domande

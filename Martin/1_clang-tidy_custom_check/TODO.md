@@ -1,7 +1,7 @@
 # TODO — cosa manca per arrivare all'esame
 
-Stato: 2026-05-05. **Fase 1 tecnica completamente chiusa.**
-Stima totale residua: **~26-30h**.
+Stato: 2026-05-05. **Fase 1 tecnica completamente chiusa. Slide v1 fatte.**
+Stima totale residua: **~22-26h**.
 
 ---
 
@@ -31,13 +31,13 @@ Stima totale residua: **~26-30h**.
 
 ## 🎤 Fase 2 (presentazione) — ~12-16h
 
-### Slide vere (~6-8h)
-- [ ] Scegliere tool: **Marp** (markdown→PDF, comodo per chi lavora da terminale) o **Keynote/Google Slides**
-- [ ] Convertire `SLIDES.md` in slide vere, una per blocco `## Slide N`
-- [ ] Font monospace per il codice: JetBrains Mono o Fira Code
-- [ ] Evidenziare in colore le righe chiave dei matcher (slide 5, 8)
-- [ ] Diagramma slide 3 (frontend Clang → AST → matchers → check) — disegnare in Excalidraw o similare
-- [ ] Esportare in PDF
+### Slide vere (~6-8h) — **v1 fatta 2026-05-05**
+- [x] Tool scelto: **Marp CLI** (`brew install marp-cli`, v4.3.1)
+- [x] `SLIDES.md` con frontmatter Marp + tema custom (palette blu/rosso/verde, JetBrains Mono per codice, gradient cover)
+- [x] Diagramma slide "Architettura": flow a 7 box con HTML+CSS (3 grigi Clang, 2 rossi "pezzi che scriviamo noi", 1 verde output) — niente Excalidraw, già abbastanza visivo
+- [x] Export PDF: `SLIDES.pdf` 13 pagine, ~190 KB
+- [ ] **Pass di review finale**: rileggere a freddo, eventualmente sistemare overflow residui, raffinare colori/spaziature
+- [ ] Eventuale rilettura con un terzo (compagno di corso) per feedback
 
 ### Demo (~3-4h)
 - [ ] Terminale dedicato con prompt corto, font 18pt+, sfondo scuro chiaro
@@ -96,9 +96,9 @@ Da oggi (2026-05-05) all'esame, ipotizzando seminario a fine giugno + orale lugl
 
 | Settimana | Focus |
 |-----------|-------|
-| Sett. corrente | Fase 1 chiusa al 100% — partire con bozza slide |
-| +1 | Slide + diagramma + script |
-| +2 | Demo cronometrata + video backup + mail al prof |
+| Sett. corrente | Fase 1 chiusa al 100%, slide v1 fatte — script verbale + review a freddo |
+| +1 | Demo cronometrata + video backup + pass review slide |
+| +2 | Mail al prof + eventuali rifiniture slide |
 | +3 | Studio orale lezioni 1-5 |
 | +4 | Studio orale lezioni 6-9 + cheatsheet |
 | +5 | **SEMINARIO** + 44 domande tipo |

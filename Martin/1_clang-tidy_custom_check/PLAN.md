@@ -18,10 +18,10 @@ Tre fasi: **progetto tecnico** → **presentazione** → **preparazione orale**.
 - ✅ **Run su progetti reali** (richiesta del prof):
   - `fmt` (3 TU, 0.7s) → 0 hit (clean by design ✅)
   - `tinyxml2` (2 TU, 0.2s) → **28 hit, 0 falsi positivi** vs 42 match grep — gap di 14 = valore AST
-- ✅ Bozza `SLIDES.md` (13 slide, 15 min) — slide 10 e 13 aggiornate con i risultati reali del confronto LLM
+- ✅ **Slide v1 (2026-05-05)**: `SLIDES.md` riscritto con frontmatter Marp + tema custom (palette blu/rosso/verde, JetBrains Mono, cover con gradient), diagramma architettura inline a 7 box colorati (3 grigi Clang, 2 rossi "pezzi che scriviamo", 1 verde output), export `SLIDES.pdf` 13 pagine, 15 min. Resta solo un pass di review a freddo prima di mandarle al prof.
 - ✅ **Confronto LLM reale completato 2026-05-05** (24 run: 6 snippet × Claude Opus 4.7 × ChatGPT 5.5 × 2 chat fresche). Wow moment confermato sullo snippet 06 (overload resolution): clang-tidy 100% deterministico, LLM 50/50 sul finding chiave. Pattern stabili: ChatGPT non propone mai `std::print`/`std::println` come fix primario (0/6, solo come alternativa condizionale); Claude lo fa quando appropriato (4/6); LLM trovano bug fuori scope reali (`2.5→2` truncation, `nullptr` UB). Vedi `comparison/COMPARISON.md` e `comparison/llm_responses/`.
 
-**Fase 2 (presentazione) ~5% fatta:** solo outline testuale, slide vere non ancora prodotte.
+**Fase 2 (presentazione) ~40% fatta:** slide v1 in PDF prodotte (Marp). Mancano: pass review a freddo, demo cronometrata, video backup, script verbale, mail al prof.
 
 **Fase 3 (orale) 0% fatta:** vedi `study_method/STUDY_PLAN.md`.
 
