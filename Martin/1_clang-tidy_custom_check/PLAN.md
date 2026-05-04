@@ -4,15 +4,36 @@ Tre fasi: **progetto tecnico** → **presentazione** → **preparazione orale**.
 
 ---
 
+## ✅ Stato attuale (2026-05-04)
+
+- Argomento confermato dal prof, scope invariato
+- Toolchain locale: `clang` ok (Apple), **mancano** `ninja`, `bear`, `llvm-project` clone, build di `clang-tidy`
+- Nessun codice del check ancora scritto
+- Prossimo passo concreto: Step 1.1 (setup ambiente)
+
+---
+
+## 📌 Indicazioni dal prof (incontro 2026-05-04)
+
+Il prof ha confermato l'argomento senza obiezioni e ha aggiunto 3 suggerimenti concreti per arricchire il seminario:
+
+1. **Test su progetto reale, non solo esempi piccoli** — oltre ai file `.cc` di esempio, lanciare il check su una libreria/progetto open source di dimensioni medio-grandi per mostrare valore pratico e gestione di falsi positivi/negativi a scala.
+2. **Usare Bear per generare `compile_commands.json`** — `bear -- make` (o equivalente) intercetta la build di un progetto esistente e produce il database di compilazione necessario a clang-tidy per analizzarlo correttamente. Da mostrare anche in demo.
+3. **Confronto clang-tidy vs IA su esempi piccoli** — su 2-3 snippet, far girare il check e in parallelo chiedere a un LLM di trovare lo stesso problema. Discutere differenze: determinismo, fix-it, falsi positivi, scalabilità, costo.
+
+Questi 3 punti vanno integrati: nelle slide finali (sezione "valore pratico" + "limiti vs IA"), nella demo (Bear + run su progetto reale), nei deliverable di Fase 1.
+
+---
+
 ## 🛠 FASE 1 — Costruzione del progetto (~25-30h)
 
 ### Obiettivo finale
 Avere un check clang-tidy funzionante, testato, con esempi che lo triggherrano e altri che no. Tutto buildato dal sorgente di LLVM.
 
 ### Step 1.1 — Setup ambiente (3-5h)
-- [ ] Installare prerequisiti: `cmake`, `ninja`, Python 3, Git
+- [ ] Installare prerequisiti: `cmake` ✅, `ninja` ❌, `bear` ❌, Python 3, Git
   ```bash
-  brew install cmake ninja
+  brew install ninja bear
   ```
 - [ ] Clonare `llvm-project` in una directory di lavoro (NON dentro questo repo)
   ```bash
@@ -126,6 +147,31 @@ Scegli UNO. Vuoi un check con:
 - [ ] Iterare finché tutti passano
 - [ ] Test manuale su file più complessi (es. la cartella TinyP del corso)
 
+### Step 1.6b — Test su progetto reale con Bear (3-4h) ⭐ richiesta del prof
+- [ ] Installare Bear: `brew install bear`
+- [ ] Scegliere un progetto open source C/C++ medio (es. una libreria header-only o un tool CLI: `jq`, `redis`, `zstd`, una libreria di tua scelta)
+- [ ] Generare il compile DB:
+  ```bash
+  cd path/to/project
+  bear -- make    # oppure: bear -- cmake --build build
+  # produce compile_commands.json
+  ```
+- [ ] Lanciare il check sull'intero progetto:
+  ```bash
+  ~/llvm-project/build/bin/clang-tidy -p . -checks='-*,misc-no-cstyle-cast' src/*.c
+  # oppure run-clang-tidy per parallelismo
+  run-clang-tidy -p . -checks='-*,misc-no-cstyle-cast'
+  ```
+- [ ] Annotare: quanti hit, quanti falsi positivi/negativi, tempo di esecuzione
+- [ ] Salvare 2-3 hit "interessanti" da mostrare in demo
+
+### Step 1.6c — Confronto con IA su esempi piccoli (2-3h) ⭐ richiesta del prof
+- [ ] Preparare 3-4 snippet brevi (5-15 righe) con il pattern target
+- [ ] Per ognuno: lanciare il check e registrare output (warning + fix-it)
+- [ ] Stesso snippet → chiedere a un LLM (Claude/ChatGPT) "trova problemi in questo codice"
+- [ ] Tabella di confronto: precisione, determinismo, fix-it applicabile, scalabilità, costo per file
+- [ ] Identificare 1 caso dove clang-tidy vince chiaramente e 1 dove l'IA può completare
+
 ### Step 1.7 — Documentazione check (1-2h)
 - [ ] Scrivere il file `.rst` di doc:
   ```bash
@@ -137,6 +183,8 @@ Scegli UNO. Vuoi un check con:
 ✅ Eseguibile `clang-tidy` con il tuo check funzionante
 ✅ Set di test che passano
 ✅ 2-3 file `.cc` di esempio (con bug e senza) per la demo
+✅ `compile_commands.json` generato con Bear su progetto reale + log di esecuzione
+✅ Tabella di confronto clang-tidy vs LLM su snippet piccoli
 ✅ Repository git locale con il tuo lavoro
 
 ---
@@ -164,9 +212,9 @@ Slide proposte:
 7. **Il nostro check (intro)** — cosa segnaliamo, perché
 8. **registerMatchers** — codice sullo schermo
 9. **check() + diagnostic + fix-it** — codice
-10. **Demo live** — passa al terminale
-11. **Test e CI integration** — come si scrivono i test, integrazione build farm
-12. **Take-away** — quando vale la pena scrivere check custom + risorse
+10. **Demo live (parte 1)** — il check su esempi piccoli + confronto con LLM sullo stesso input
+11. **Demo live (parte 2)** — Bear + run su progetto reale (compile_commands.json)
+12. **Test, CI, take-away** — quando vale la pena scrivere check custom vs affidarsi a IA + risorse
 
 ### Step 2.3 — Codice sulle slide (1-2h)
 - [ ] Snippet di codice **non più di 15 righe per slide**
@@ -263,19 +311,18 @@ Il prof può fare domande che incrociano più aree. Allenati su queste:
 
 ---
 
-## 📅 Timeline suggerita (per chi parte da zero)
+## 📅 Timeline residua (post-incontro)
 
 | Settimana | Attività |
 |---|---|
-| **Sett. -8** | Mail al prof, fissa appuntamento Teams |
-| **Sett. -7** | Appuntamento col prof, conferma argomento, inizia setup LLVM (Fase 1.1-1.2) |
-| **Sett. -6** | Sviluppa il check (Fase 1.3-1.6) |
-| **Sett. -5** | Test, doc check, primo abbozzo slide (Fase 1.7 + Fase 2.1-2.2) |
-| **Sett. -4** | Slide finali + demo live (Fase 2.3-2.5) |
-| **Sett. -3** | Prove cronometrate seminario (Fase 2.6) |
-| **Sett. -2** | **SEMINARIO** + inizio studio orale (Fase 3.1) |
-| **Sett. -1** | Studio orale intensivo + cheatsheet + domande tipo (Fase 3.2-3.4) |
+| **Sett. corrente** | Setup LLVM + Bear (Fase 1.1-1.2) |
+| **+1** | Sviluppa il check (Fase 1.3-1.6) |
+| **+2** | Test su progetto reale con Bear + confronto vs LLM (Step 1.6b/c) + doc (1.7) |
+| **+3** | Bozza slide + demo (Fase 2.1-2.4) |
+| **+4** | Script + prove cronometrate (Fase 2.5-2.6) |
+| **+5** | **SEMINARIO** + inizio studio orale (Fase 3.1) |
+| **+6** | Studio orale intensivo (Fase 3.2-3.4) |
 | **Giorno -1** | Ripasso leggero (Fase 3.5) |
 | **Giorno 0** | **ORALE** |
 
-⚠️ **Margine di sicurezza:** lascia almeno 1 settimana buffer ovunque. Build LLVM può fallire, demo può rompersi, il prof può rispondere in ritardo.
+⚠️ Buffer: almeno 1 settimana ovunque. La build di LLVM è il rischio più alto (10-15 GB, 30-60 min su M-series).
