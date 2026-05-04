@@ -63,6 +63,21 @@ if ! grep -q "misc-no-printf" "$MOD"; then
   echo "patched $MOD registerCheck"
 fi
 
-# 4. Build
+# 4. Documentazione (.rst)
+DOCS="$LLVM/clang-tools-extra/docs/clang-tidy/checks/misc"
+LIST="$LLVM/clang-tools-extra/docs/clang-tidy/checks/list.rst"
+cp -v "$REPO/check/no-printf.rst" "$DOCS/"
+if ! grep -q "misc-no-printf <misc/no-printf>" "$LIST"; then
+  awk '
+    /misc-no-recursion <misc\/no-recursion>/ && !done {
+      print "   :doc:`misc-no-printf <misc/no-printf>`, \"Yes\""
+      done = 1
+    }
+    { print }
+  ' "$LIST" > "$LIST.tmp" && mv "$LIST.tmp" "$LIST"
+  echo "patched $LIST"
+fi
+
+# 5. Build
 echo "==> ninja clang-tidy"
 ninja -C "$LLVM/build" clang-tidy
