@@ -4,24 +4,22 @@ Tre fasi: **progetto tecnico** → **presentazione** → **preparazione orale**.
 
 ---
 
-## ✅ Stato attuale (2026-05-04, fine giornata)
+## ✅ Stato attuale (2026-05-05)
 
-**Fase 1 (tecnica) — 100% chiusa lato Claude:**
+**Fase 1 (tecnica) — 100% chiusa, incluso confronto LLM:**
 - ✅ Argomento confermato dal prof, scope invariato
 - ✅ Toolchain: `clang`, `ninja`, `bear`, `cmake`, `FileCheck` installati/buildati
 - ✅ `llvm-project` clonato, configurato e buildato (`clang-tidy` 23.0.0git pronto in `~/llvm-project/build/bin/`)
 - ✅ Check `misc-no-printf` scritto, installato, ricompilato e testato
 - ✅ Demo locali: 3 hit su `demo/bad.cpp`, 0 su `demo/good.cpp`
-- ✅ 4 snippet di confronto pronti — il rilevamento clang-tidy è quello atteso
+- ✅ 6 snippet di confronto (4 originali + 2 estensioni: 05_method_collision, 06_using_template_alias) — rilevamento clang-tidy verificato run-by-run
 - ✅ `bear_demo/`: `bear -- make` → `compile_commands.json` → 5/5 hit reali
 - ✅ **Lit test ufficiale**: integrato in `clang-tools-extra/test/clang-tidy/checkers/misc/`, `PASS (1 of 1)` con `llvm-lit`
 - ✅ **Run su progetti reali** (richiesta del prof):
   - `fmt` (3 TU, 0.7s) → 0 hit (clean by design ✅)
   - `tinyxml2` (2 TU, 0.2s) → **28 hit, 0 falsi positivi** vs 42 match grep — gap di 14 = valore AST
-- ✅ Bozza `SLIDES.md` (13 slide, 15 min)
-
-**Resta da fare lato utente** (non tecnico-implementativo):
-- ⏳ Confronto LLM reale sui 4 snippet (richiede sessione Claude/ChatGPT separata)
+- ✅ Bozza `SLIDES.md` (13 slide, 15 min) — slide 10 e 13 aggiornate con i risultati reali del confronto LLM
+- ✅ **Confronto LLM reale completato 2026-05-05** (24 run: 6 snippet × Claude Opus 4.7 × ChatGPT 5.5 × 2 chat fresche). Wow moment confermato sullo snippet 06 (overload resolution): clang-tidy 100% deterministico, LLM 50/50 sul finding chiave. Pattern stabili: ChatGPT non propone mai `std::print`/`std::println` (0/6); Claude lo fa quando appropriato (4/6); LLM trovano bug fuori scope reali (`2.5→2` truncation, `nullptr` UB). Vedi `comparison/COMPARISON.md` e `comparison/llm_responses/`.
 
 **Fase 2 (presentazione) ~5% fatta:** solo outline testuale, slide vere non ancora prodotte.
 

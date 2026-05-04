@@ -1,17 +1,19 @@
 # TODO — cosa manca per arrivare all'esame
 
-Stato: 2026-05-04, fine giornata. **Fase 1 tecnica chiusa.**
-Stima totale residua: **~28-32h** (era 30-35).
+Stato: 2026-05-05. **Fase 1 tecnica completamente chiusa.**
+Stima totale residua: **~26-30h**.
 
 ---
 
-## ⚙️ Fase 1 (tecnica) — quasi tutto fatto (~1-2h residue)
+## ⚙️ Fase 1 (tecnica) — TUTTO FATTO ✅
 
-- [ ] **Confronto LLM reale sui 4 snippet** (1-2h) — **unica cosa rimasta in Fase 1**
-  - Per ognuno dei file in `comparison/snippets/` chiedere a Claude e ChatGPT: *"trova problemi e suggerisci fix in questo C++ moderno"*
-  - Annotare in `comparison/COMPARISON.md` cosa l'LLM dice davvero (la tabella attuale è predittiva)
-  - Identificare almeno **1 caso dove l'LLM sbaglia** (probabile: snippet 02 namespace o snippet 03 macro) per usarlo come punto di forza in slide
-  - Da fare in sessione LLM separata (non ha senso far fare a Claude il confronto contro Claude stesso)
+- [x] **Confronto LLM reale sui 6 snippet** ✅ FATTO 2026-05-05
+  - Estesi i 4 snippet originali a 6: aggiunti `05_method_collision.cpp` (trappola falso positivo, metodo `Logger::printf`) e `06_using_template_alias.cpp` (caso composito: using-decl + template wrapper + function pointer + macro variadic + istanze template)
+  - 24 chat fresche totali (6 snippet × 2 modelli × 2 run) per testare anche il determinismo tra esecuzioni
+  - Risultati integrali in `comparison/llm_responses/0[1-6]_*_{claude,chatgpt}.md` e tabella consolidata in `comparison/COMPARISON.md`
+  - **Wow moment confermato: snippet 06**. Su `::printf("...", 1)` dopo `using logging::printf;`, la overload resolution sceglie il template (`logging::printf<int>`), non libc. clang-tidy lo capisce sempre (1 hit deterministico). LLM: **2 su 4 run sbagliano** il finding chiave, e i due modelli sono incoerenti con sé stessi tra chat fresche.
+  - **Pattern stabili**: ChatGPT non propone mai `std::print`/`std::println` (0/6 snippet); Claude lo propone come fix primario quando appropriato (4/6); determinismo Claude > ChatGPT sui primi 5 snippet.
+  - **Bonus inatteso**: gli LLM trovano bug fuori scope del check ma reali (troncamento `2.5 → 2` snippet 04, `%s` con `nullptr` UB snippet 05) — conferma "complementarità", non "sostituibilità".
 
 - [x] **Lit test via build farm** ✅ FATTO 2026-05-04
   - `FileCheck` buildato, test copiato in `clang-tools-extra/test/clang-tidy/checkers/misc/`
@@ -94,7 +96,7 @@ Da oggi (2026-05-04) all'esame, ipotizzando seminario a fine giugno + orale lugl
 
 | Settimana | Focus |
 |-----------|-------|
-| Sett. corrente | Coda Fase 1 (LLM reale, lit test, libreria reale) |
+| Sett. corrente | Fase 1 chiusa al 100% — partire con bozza slide |
 | +1 | Slide + diagramma + script |
 | +2 | Demo cronometrata + video backup + mail al prof |
 | +3 | Studio orale lezioni 1-5 |

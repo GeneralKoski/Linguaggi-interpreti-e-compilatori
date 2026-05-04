@@ -1,6 +1,6 @@
 # TODO — esame Linguaggi, Interpreti e Compilatori
 
-Stato: 2026-05-04, fine giornata.
+Stato: 2026-05-05.
 Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_check/{PLAN,TODO,RESULTS}.md`.
 
 ---
@@ -13,27 +13,26 @@ Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_
 - Bear demo Make funzionante (5/5)
 - Documentazione `.rst` ufficiale del check + entry in `list.rst`
 - Bozza slide testuale (`SLIDES.md`, 13 slide)
-- Setup blind test LLM (snippet neutrali + 8 template di risposta pronti)
+- **Confronto LLM reale completato (2026-05-05)**: 6 snippet × 2 modelli × 2 chat fresche = 24 run. Wow moment confermato sullo snippet 06 (overload resolution): clang-tidy 100% deterministico, LLM 50/50 sul finding chiave. Vedi `Martin/1_clang-tidy_custom_check/comparison/COMPARISON.md`.
 
 ---
 
 ## 🎯 Da fare — in ordine di priorità
 
-### 1. Confronto LLM reale (~1-2h) — solo tu
-Tutto pronto in `Martin/1_clang-tidy_custom_check/comparison/`:
-- Leggi `llm_responses/_PROMPT.md` per la procedura
-- Apri 8 chat fresche (4 snippet × Claude Opus 4.7 + ChatGPT 5.5)
-- Usa **`snippets_neutral/`** (versione blind, senza commenti rivelatori)
-- Compila gli 8 template in `llm_responses/`
-- Riempi tabella in `comparison/COMPARISON.md`
-- Identifica il "wow moment" (probabilmente snippet 02 o 03)
-- Commit + spunta riga in TODO interno
+### ~~1. Confronto LLM reale~~ ✅ FATTO 2026-05-05
+6 snippet (estesi da 4: aggiunti 05_method_collision e 06_using_template_alias) × 2 modelli × 2 chat fresche = 24 run completati. Risultati integrali in `Martin/1_clang-tidy_custom_check/comparison/`.
+
+**Wow moment vero**: snippet 06 (overload resolution dopo `using logging::printf;`). clang-tidy = 1 hit deterministico sempre nello stesso punto; LLM = 2/4 run sbagliano il finding chiave, lo stesso modello dà risposte opposte tra chat fresche.
+
+**Pattern stabili**: ChatGPT non propone mai `std::print`/`std::println` (0/6); Claude lo fa quando appropriato (4/6); determinismo Claude > ChatGPT.
+
+**Bonus**: LLM trova bug fuori scope (troncamento `2.5→2`, `nullptr` UB) → conferma complementarità.
 
 ### 2. Mail al prof (~30 min) — tra ~2 settimane (intorno al 2026-05-18)
 Incontro fatto oggi 2026-05-04: scrivere subito sa di "non ho fatto nulla, dammi una data". Tra 2 settimane invece arrivi con il check già funzionante e una proposta concreta.
 
 Cosa scrivere:
-- Riassumere brevemente cosa è stato fatto (check `misc-no-printf` operativo, lit test PASS, run reali su `fmt`/`tinyxml2`, demo Bear pronto)
+- Riassumere brevemente cosa è stato fatto (check `misc-no-printf` operativo, lit test PASS, run reali su `fmt`/`tinyxml2`, demo Bear pronto, confronto LLM su 6 snippet × 2 modelli completato)
 - Proporre 1-2 date tentative (preavviso ≥ 30 giorni)
 - Chiedere se preferisce slide via mail prima per controllo
 
@@ -104,7 +103,7 @@ Per ogni lezione: leggi `RIASSUNTO.md` → apri PDF docente → "Punti chiave pe
 ## 📅 Ordine di lavoro suggerito
 
 ```
-Sett. corrente : confronto LLM + inizio bozza slide
+Sett. corrente : Fase 1 100% chiusa, partire con bozza slide
 +1             : slide + diagramma
 +2             : MAIL AL PROF + script + demo cronometrata + video backup
 +3             : studio orale lez 1-5

@@ -133,20 +133,32 @@ void NoPrintfCheck::check(const MatchFinder::MatchResult &R) {
 
 ---
 
-## Slide 10 — Demo (parte 1): esempi piccoli + LLM
+## Slide 10 — Demo (parte 1): esempi piccoli + confronto LLM
 
 [TERMINALE]
 
 ```bash
 clang-tidy -checks='-*,misc-no-printf' snippets/02_namespace_collision.cpp
-# → segnala SOLO ::printf, ignora mylib::printf
+# → 1 hit: SOLO ::printf, ignora mylib::printf
 
 clang-tidy -checks='-*,misc-no-printf' snippets/03_macro_indirection.cpp
-# → segnala anche printf nascosto da macro LOG(x)
+# → 2 hit: vede printf dentro la macro LOG(x)
+
+clang-tidy -checks='-*,misc-no-printf' snippets/06_using_template_alias.cpp
+# → 1 SOLO hit: overload resolution dirotta `::printf("...", int)`
+#   al template logging::printf, il check lo sa
 ```
 
-Stesso input a un LLM: confronto live falsi positivi/negativi.
-[Tabella di confronto da `comparison/COMPARISON.md`]
+**Confronto reale (6 snippet × Claude Opus 4.7 × ChatGPT 5.5 × 2 chat fresche = 24 run):**
+
+| | clang-tidy | Claude | ChatGPT |
+|---|---|---|---|
+| Determinismo | 100% | alto su 5/6 | medio |
+| Fix-it = `std::print` (C++23) | sì | 4/6 | **0/6** |
+| Snippet 06 (overload resolution) | 1 hit deterministico | 1ª ✓ / 2ª ✗ | 1ª ✗ / 2ª ✓ |
+| Bug semantico fuori scope (`2.5→2`) | non visto | trovato ⭐ | trovato ⭐ |
+
+**Wow moment**: stesso modello, stesso prompt, due chat fresche → due interpretazioni opposte dell'overload resolution. clang-tidy, sempre 1 hit nello stesso punto.
 
 ---
 
@@ -190,6 +202,10 @@ Punto chiave: **`grep printf` → 42 / clang-tidy AST → 28**. I 14 di scarto s
 **Quando NO:**
 - regola fluida → meglio code review umana o LLM
 - check di stile generico → c'è già un check ufficiale
+
+**LLM e clang-tidy sono complementari, non sostituibili:**
+- clang-tidy è deterministico sul suo mandato; gli LLM portano valore su bug fuori scope (es. `static_cast<int>(2.5) → 2`)
+- ma su finding di precisione AST (overload resolution, scope) gli LLM fluttuano tra esecuzioni
 
 **Risorse:**
 - `clang-tidy/Contributing.html`
