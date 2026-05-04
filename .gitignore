@@ -35,3 +35,9 @@ lexer-cpp.cc
 # Backup
 *.bak
 *.orig
+
+# Bear demo artifacts
+Martin/1_clang-tidy_custom_check/bear_demo/*.o
+Martin/1_clang-tidy_custom_check/bear_demo/app
+Martin/1_clang-tidy_custom_check/bear_demo/compile_commands.json
+Martin/1_clang-tidy_custom_check/bear_demo/fixes.yaml
