@@ -4,24 +4,30 @@ Tre fasi: **progetto tecnico** → **presentazione** → **preparazione orale**.
 
 ---
 
-## ✅ Stato attuale (2026-05-04, post-build)
+## ✅ Stato attuale (2026-05-04, fine giornata)
 
-**Fase 1 (tecnica) ~90% fatta:**
+**Fase 1 (tecnica) — 100% chiusa lato Claude:**
 - ✅ Argomento confermato dal prof, scope invariato
-- ✅ Toolchain: `clang`, `ninja`, `bear`, `cmake` installati
-- ✅ `llvm-project` clonato, configurato e buildato (`clang-tidy` 23.0.0git pronto)
+- ✅ Toolchain: `clang`, `ninja`, `bear`, `cmake`, `FileCheck` installati/buildati
+- ✅ `llvm-project` clonato, configurato e buildato (`clang-tidy` 23.0.0git pronto in `~/llvm-project/build/bin/`)
 - ✅ Check `misc-no-printf` scritto, installato, ricompilato e testato
-- ✅ 3 hit su `demo/bad.cpp`, 0 su `demo/good.cpp`
-- ✅ 4 snippet di confronto + tabella in `comparison/COMPARISON.md` (predittiva, da validare con LLM reale)
+- ✅ Demo locali: 3 hit su `demo/bad.cpp`, 0 su `demo/good.cpp`
+- ✅ 4 snippet di confronto pronti — il rilevamento clang-tidy è quello atteso
 - ✅ `bear_demo/`: `bear -- make` → `compile_commands.json` → 5/5 hit reali
+- ✅ **Lit test ufficiale**: integrato in `clang-tools-extra/test/clang-tidy/checkers/misc/`, `PASS (1 of 1)` con `llvm-lit`
+- ✅ **Run su progetti reali** (richiesta del prof):
+  - `fmt` (3 TU, 0.7s) → 0 hit (clean by design ✅)
+  - `tinyxml2` (2 TU, 0.2s) → **28 hit, 0 falsi positivi** vs 42 match grep — gap di 14 = valore AST
 - ✅ Bozza `SLIDES.md` (13 slide, 15 min)
-- ⏳ **Mancano**: confronto LLM reale, run su libreria open source vera, lit test via `ninja check-clang-tools`
+
+**Resta da fare lato utente** (non tecnico-implementativo):
+- ⏳ Confronto LLM reale sui 4 snippet (richiede sessione Claude/ChatGPT separata)
 
 **Fase 2 (presentazione) ~5% fatta:** solo outline testuale, slide vere non ancora prodotte.
 
 **Fase 3 (orale) 0% fatta:** vedi `study_method/STUDY_PLAN.md`.
 
-Per la lista completa e azionabile delle cose mancanti vedi **`TODO.md`** in questa cartella.
+Lista completa azionabile in **`TODO.md`**, output reali in **`RESULTS.md`**.
 
 ---
 

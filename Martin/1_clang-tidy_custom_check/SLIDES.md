@@ -150,16 +150,24 @@ Stesso input a un LLM: confronto live falsi positivi/negativi.
 
 ---
 
-## Slide 11 — Demo (parte 2): progetto reale con Bear
+## Slide 11 — Demo (parte 2): progetto reale
 
+**Caso A — `bear_demo` (Make):**
 ```bash
-cd bear_demo
-bear -- make           # genera compile_commands.json
-run-clang-tidy -p . -checks='-*,misc-no-printf'
+bear -- make            # produce compile_commands.json
+clang-tidy -p . main.cpp logger.cpp net.cpp util.cpp
+# → 5/5 hit, 0 falsi positivi
 ```
 
-Bear **intercetta** la build esistente: nessuna integrazione invasiva nel Makefile.
-Output: tutti gli hit del progetto in un colpo solo, con tempi e count.
+**Caso B — `tinyxml2` (CMake, su macOS Bear non basta):**
+```bash
+cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+clang-tidy -p build --extra-arg=-isysroot $(xcrun --show-sdk-path) \
+  tinyxml2.cpp xmltest.cpp
+# → 28 hit in 0.2s
+```
+
+Punto chiave: **`grep printf` → 42 / clang-tidy AST → 28**. I 14 di scarto sono commenti, stringhe, `vfprintf`/`snprintf`, macro. È esattamente il valore dell'analisi AST.
 
 ---
 

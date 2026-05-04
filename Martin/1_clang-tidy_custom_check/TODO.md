@@ -1,16 +1,17 @@
 # TODO — cosa manca per arrivare all'esame
 
-Stato: 2026-05-04, dopo il completamento della Fase 1 tecnica.
-Stima totale residua: **~30-35h**.
+Stato: 2026-05-04, fine giornata. **Fase 1 tecnica chiusa.**
+Stima totale residua: **~28-32h** (era 30-35).
 
 ---
 
-## ⚙️ Fase 1 (tecnica) — coda residua (~3-5h)
+## ⚙️ Fase 1 (tecnica) — quasi tutto fatto (~1-2h residue)
 
-- [ ] **Confronto LLM reale sui 4 snippet** (1-2h)
+- [ ] **Confronto LLM reale sui 4 snippet** (1-2h) — **unica cosa rimasta in Fase 1**
   - Per ognuno dei file in `comparison/snippets/` chiedere a Claude e ChatGPT: *"trova problemi e suggerisci fix in questo C++ moderno"*
   - Annotare in `comparison/COMPARISON.md` cosa l'LLM dice davvero (la tabella attuale è predittiva)
   - Identificare almeno **1 caso dove l'LLM sbaglia** (probabile: snippet 02 namespace o snippet 03 macro) per usarlo come punto di forza in slide
+  - Da fare in sessione LLM separata (non ha senso far fare a Claude il confronto contro Claude stesso)
 
 - [x] **Lit test via build farm** ✅ FATTO 2026-05-04
   - `FileCheck` buildato, test copiato in `clang-tools-extra/test/clang-tidy/checkers/misc/`
@@ -81,7 +82,9 @@ Seguire `study_method/STUDY_PLAN.md`. Riassunto:
 | Demo live si rompe per bug ambiente | Video backup pronto + screenshot |
 | Date orale troppo vicine al seminario | Mandare mail al prof subito per buffer |
 | Studio orale tirato all'ultimo → bocciatura | Iniziare il giorno dopo che hai mandato la mail |
-| Disco pieno (LLVM build = 13GB) | Già in 40GB liberi, ok ma non scaricare altro |
+| Disco quasi pieno (LLVM build occupa parecchio) | Verificare con `df -h ~`. Se serve, dopo il seminario si può cancellare `~/llvm-project/build/` (10+ GB) |
+| Demo SDK macOS non passato | Usare sempre `--extra-arg=-isysroot $(xcrun --show-sdk-path)` nei comandi clang-tidy mostrati in slide |
+| Bear non funziona con ninja su mac | Usare `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` per CMake. Bear va riservato al `bear_demo` Make |
 
 ---
 
