@@ -1,7 +1,7 @@
 # TODO — cosa manca per arrivare all'esame
 
-Stato: 2026-05-05. **Fase 1 tecnica completamente chiusa. Slide v1 fatte.**
-Stima totale residua: **~22-26h**.
+Stato: 2026-05-05. **Fase 1 tecnica chiusa. Slide v1 fatte. Script verbale fatto. Materiali studio auditati e completi.**
+Stima totale residua: **~26-32h** (demo + pratica voce + studio orale + ripasso).
 
 ---
 
@@ -39,9 +39,9 @@ Stima totale residua: **~22-26h**.
 - [ ] **Pass di review finale**: rileggere a freddo, eventualmente sistemare overflow residui, raffinare colori/spaziature
 - [ ] Eventuale rilettura con un terzo (compagno di corso) per feedback
 
-### Demo (~3-4h)
+### Demo (~3-4h) — pre-requisito: rileggi `SCRIPT.md`
 - [ ] Terminale dedicato con prompt corto, font 18pt+, sfondo scuro chiaro
-- [ ] Pre-popolare `~/.bash_history` con i comandi della demo (così basta freccia ↑)
+- [ ] Pre-popolare `~/.bash_history` con i comandi della demo (così basta freccia ↑) — i comandi target sono nelle slide 10 e 11 (snippet 02, 06, bear_demo, tinyxml2)
 - [ ] Provare la demo cronometrata **almeno 5 volte**, target 4-5 min per la sezione "demo live"
 - [ ] **Piano B**: registrare un video da 2'30" come backup (QuickTime + zoom)
 
@@ -65,15 +65,16 @@ L'orale vale **70%** e copre **tutto il programma**, non solo il seminario.
 
 Seguire `study_method/STUDY_PLAN.md`. Riassunto:
 
-- [ ] **Studio sistematico** dei 9 capitoli (10-12h)
+- [ ] **Studio sistematico** dei 9 capitoli + parsing (12-14h)
   - Lezione 1-3 (Intro, Interpreti vs Compilatori, Struttura): 1.5h
   - Lezione 4-5 (Analisi lessicale, Flex): 2h
-  - Lezione 6 (Analisi dipendente da contesto, TinyP): 2h
-  - Lezione 7 (IR, LLVM, GEP, code shape): 2-3h
-  - Lezione 8 (Middle end, dataflow, ottimizzazioni): 2-3h
-  - Lezione 9 (Interpretazione astratta): 1.5h
-- [ ] **Cheatsheet**: memorizzare `notes/02_cheatsheet.md` (3h)
-- [ ] **44 domande tipo**: rispondere a voce, cronometrando 2-3 min ognuna (`notes/04_domande_tipo.md`) (2-3h)
+  - **Parsing — `notes/08_parsing.md`** (CFG, LL(1), LR(1), conflitti, LALR/Bison): 2h. Lacuna chiusa il 2026-05-05.
+  - Lezione 6 (Analisi dipendente da contesto, TinyP, type analysis): 2h
+  - Lezione 7 (IR, LLVM, GEP, code shape, invoke, conversioni, access link): 2-3h
+  - Lezione 8 (Middle end, dataflow Live/Reaching/Available/Very Busy, IV+strength reduction, mem2reg/SROA/instcombine/LICM): 2-3h
+  - Lezione 9 (Interpretazione astratta, Knaster-Tarski, Kleene, soundness, widening): 1.5h
+- [ ] **Cheatsheet**: memorizzare `notes/02_cheatsheet.md` (3h) — include ora tabella riepilogo 4 DFA, FIRST/FOLLOW, Knaster-Tarski/Kleene
+- [ ] **57 domande tipo** (era 44, +13 dopo l'audit): rispondere a voce cronometrando 2-3 min ognuna (`notes/04_domande_tipo.md`) (3-4h). Le 13 nuove hanno traccia di risposta integrata.
 - [ ] **Domande "incrocio"**: pipeline completa, constant propagation, middle end vs astratta (2-3h)
 - [ ] **Ripasso ad alta intensità** sera prima dell'orale (2h)
 

@@ -14,6 +14,8 @@ Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_
 - Documentazione `.rst` ufficiale del check + entry in `list.rst`
 - **Confronto LLM reale completato (2026-05-05)**: 6 snippet × 2 modelli × 2 chat fresche = 24 run. Wow moment confermato sullo snippet 06 (overload resolution): clang-tidy 100% deterministico, LLM 50/50 sul finding chiave. Vedi `Martin/1_clang-tidy_custom_check/comparison/COMPARISON.md`.
 - **Slide v1 (2026-05-05)**: `SLIDES.md` riscritto con frontmatter Marp + tema custom, esportato in `SLIDES.pdf` 13 pagine. Diagramma architettura inline a 7 box colorati. Resta solo un pass di review a freddo.
+- **Script verbale (2026-05-05)**: `Martin/1_clang-tidy_custom_check/SCRIPT.md` con frasi pivot tecnico-fluide per ogni slide, apertura/chiusura forte (~15s ognuna), transizioni esplicite, Q&A con 6 domande probabili + risposte preparate, note operative.
+- **Materiali studio orale (2026-05-05)**: audit completo dei 9 RIASSUNTO + `notes/`. Chiuse lacune bloccanti per orale 70% (era assente l'analisi sintattica → nuovo `notes/08_parsing.md` ~670 righe; corretti errori in Live equation, Galois connection, dominator init; aggiunte sezioni in IR (GEP, invoke, conversioni, refcount, access link), Middle End (Available Expr+GCSE, Very Busy+hoisting, IV+strength reduction, mem2reg/SROA/instcombine/LICM), Interpretazione Astratta (Knaster-Tarski, Kleene, soundness con dim, esempio Intervals)). Glossario esteso, 13 nuove domande (44 → 57).
 
 ---
 
@@ -39,37 +41,44 @@ Cosa scrivere:
 ### ~~3. Slide vere~~ ✅ v1 FATTA 2026-05-05
 `SLIDES.md` con frontmatter Marp + tema custom (palette blu/rosso/verde, JetBrains Mono, gradient cover); diagramma architettura inline (HTML+CSS, 7 box colorati); export `SLIDES.pdf` 13 pagine. Resta solo un pass di review a freddo prima di mandarle al prof.
 
-### 4. Demo cronometrata (~3-4h)
+### 4. Demo cronometrata + pratica script (~4-5h)
+**Pre-requisito:** rileggi prima `Martin/1_clang-tidy_custom_check/SCRIPT.md` per allineare i comandi della demo con le frasi-pivot delle slide 10 e 11.
+
 - Terminale dedicato: prompt corto, font ≥ 18pt, sfondo chiaro
 - Pre-popolare `~/.bash_history` con i comandi della demo (basta freccia ↑)
 - Provare la demo **almeno 5 volte**, target 4-5 min per la sezione "demo live"
 - **Piano B**: registrare un video da 2'30" (QuickTime) come backup se la live si rompe
+- **Pratica voce alta dello script:** leggere `SCRIPT.md` 2-3 volte cronometrando l'intero seminario (target 15 min), per memorizzare i punti pivot. Alla terza lettura non dovresti più dipendere dal foglio.
 
 ### ~~5. Script verbale~~ ✅ FATTO 2026-05-05
 `Martin/1_clang-tidy_custom_check/SCRIPT.md`: frasi pivot tecnico-fluide per ogni slide, apertura/chiusura forte, transizioni esplicite, Q&A con 6 domande probabili + risposte preparate, note operative. Resta solo la pratica a voce alta (2-3 volte cronometrate).
 
-### 6. Studio orale dei 9 capitoli (~10-12h)
+### 6. Studio orale dei 9 capitoli (~12-14h)
 Seguire `study_method/STUDY_PLAN.md`:
 - Lez 1-3 (Intro, Interpreti vs Compilatori, Struttura): 1.5h
 - Lez 4-5 (Analisi lessicale, Flex): 2h
+- **Parsing (analisi sintattica) — `notes/08_parsing.md`** (CFG, LL(1), LR(1), conflitti, LALR/Bison): 2h. Lacuna chiusa nel 2026-05-05; non c'è una cartella di lezione dedicata, il file `notes/08_parsing.md` è la fonte unica.
 - Lez 6 (Analisi dipendente da contesto, TinyP): 2h
-- Lez 7 (IR, LLVM, GEP, code shape): 2-3h
-- Lez 8 (Middle end, dataflow, ottimizzazioni): 2-3h
-- Lez 9 (Interpretazione astratta): 1.5h
+- Lez 7 (IR, LLVM, GEP, code shape, invoke, conversioni, access link): 2-3h
+- Lez 8 (Middle end, dataflow, Available/Very Busy, induction var, LLVM passes): 2-3h
+- Lez 9 (Interpretazione astratta, Knaster-Tarski, Kleene, soundness, widening): 1.5h
 
 Per ogni lezione: leggi `RIASSUNTO.md` → apri PDF docente → "Punti chiave per l'orale" → rispondi a voce alle domande.
 
 ### 7. Memorizzazione cheatsheet (~3h)
 `notes/02_cheatsheet.md`:
-- Equazioni dataflow (Live, Reaching, Available)
+- Equazioni delle 4 DFA classiche (Live, Reaching, Available, Very Busy) + tabella riepilogo direzione/meet/init/fixpoint
 - Algoritmo LVN
-- Algoritmo Hopcroft (worklist)
-- Tabella domini astratti
-- Formula GEP
+- Algoritmo Hopcroft (worklist) con definizione precisa di `δ⁻¹(s, c)`
+- FIRST/FOLLOW (algoritmo) + tabella domini astratti
+- Formula GEP, Galois connection, Knaster-Tarski/Kleene
+- Calling convention, activation record, vtable
 
-### 8. 44 domande tipo (~2-3h)
-`notes/04_domande_tipo.md`:
+### 8. 57 domande tipo (~3-4h)
+`notes/04_domande_tipo.md` (era 44, +13 dopo l'audit del 2026-05-05):
+- Sezioni: Introduzione, Front end, **Analisi sintattica** (nuova), IR e back end, Middle end, Interpretazione astratta, Strumenti, Trick
 - Risposta a voce, cronometrando 2-3 min ognuna
+- Le 13 domande nuove hanno traccia di risposta — usala come autovalutazione (rispondi prima, poi confronta)
 - Per quelle su cui esiti: torna al RIASSUNTO o al PDF
 - Riprova il giorno dopo
 
@@ -85,14 +94,21 @@ Per ogni lezione: leggi `RIASSUNTO.md` → apri PDF docente → "Punti chiave pe
 
 ---
 
-## ⏱ Bilancio ore
+## ⏱ Bilancio ore residue (post-2026-05-05)
 
-| Blocco | Ore |
-|---|---|
-| Mail prof + confronto LLM | 1.5-2.5h |
-| Slide + demo + script | 11-14h |
-| Studio orale + cheatsheet + domande | 17-22h |
-| **Totale** | **~30-38h** |
+| Blocco | Stato | Ore residue |
+|---|---|---|
+| Confronto LLM | ✅ fatto | — |
+| Slide v1 (PDF) | ✅ fatto | — |
+| Script verbale | ✅ fatto | — |
+| Audit materiali studio | ✅ fatto | — |
+| Demo cronometrata + video backup + pratica voce alta | ⏳ | 4-5h |
+| Pass review slide a freddo | ⏳ | 0.5h |
+| Mail al prof | ⏳ | 0.5h |
+| Studio orale 9 capitoli + parsing | ⏳ | 12-14h |
+| Cheatsheet + 57 domande + incrocio | ⏳ | 7-10h |
+| Ripasso intensivo | ⏳ | 2h |
+| **Totale residuo** | | **~26-32h** |
 
 ## 📅 Ordine di lavoro suggerito
 
@@ -117,11 +133,12 @@ Buffer 1 settimana ovunque per imprevisti.
 - Stato dettagliato Fase 1: `Martin/1_clang-tidy_custom_check/RESULTS.md`
 - Piano lavoro Fase 1-2-3: `Martin/1_clang-tidy_custom_check/PLAN.md`
 - Coda Fase 1: `Martin/1_clang-tidy_custom_check/TODO.md`
-- Bozza slide: `Martin/1_clang-tidy_custom_check/SLIDES.md`
-- Setup blind test LLM: `Martin/1_clang-tidy_custom_check/comparison/`
+- **Slide finale (PDF):** `Martin/1_clang-tidy_custom_check/SLIDES.pdf` (sorgente: `SLIDES.md`)
+- **Script verbale del seminario:** `Martin/1_clang-tidy_custom_check/SCRIPT.md`
+- **Confronto LLM completo:** `Martin/1_clang-tidy_custom_check/comparison/COMPARISON.md` + `comparison/llm_responses/`
 - Programma corso e modalità d'esame: vedi cartelle `1_*` ... `9_*`
 - Metodo di studio: `study_method/STUDY_PLAN.md`
-- Cheatsheet + domande tipo: `notes/`
+- **Cheatsheet, glossario, parsing, dataflow, 57 domande:** `notes/` (indice in `notes/00_INDEX.md`)
 
 ---
 
