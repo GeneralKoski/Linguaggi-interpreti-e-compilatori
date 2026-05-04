@@ -24,7 +24,7 @@ Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_
 
 **Wow moment vero**: snippet 06 (overload resolution dopo `using logging::printf;`). clang-tidy = 1 hit deterministico sempre nello stesso punto; LLM = 2/4 run sbagliano il finding chiave, lo stesso modello dà risposte opposte tra chat fresche.
 
-**Pattern stabili**: ChatGPT non propone mai `std::print`/`std::println` (0/6); Claude lo fa quando appropriato (4/6); determinismo Claude > ChatGPT.
+**Pattern stabili**: ChatGPT non propone mai `std::print`/`std::println` come fix primario (0/6, solo come alternativa C++23 condizionale); Claude lo fa quando appropriato (4/6); determinismo Claude > ChatGPT.
 
 **Bonus**: LLM trova bug fuori scope (troncamento `2.5→2`, `nullptr` UB) → conferma complementarità.
 

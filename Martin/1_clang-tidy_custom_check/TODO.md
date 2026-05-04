@@ -12,7 +12,7 @@ Stima totale residua: **~26-30h**.
   - 24 chat fresche totali (6 snippet × 2 modelli × 2 run) per testare anche il determinismo tra esecuzioni
   - Risultati integrali in `comparison/llm_responses/0[1-6]_*_{claude,chatgpt}.md` e tabella consolidata in `comparison/COMPARISON.md`
   - **Wow moment confermato: snippet 06**. Su `::printf("...", 1)` dopo `using logging::printf;`, la overload resolution sceglie il template (`logging::printf<int>`), non libc. clang-tidy lo capisce sempre (1 hit deterministico). LLM: **2 su 4 run sbagliano** il finding chiave, e i due modelli sono incoerenti con sé stessi tra chat fresche.
-  - **Pattern stabili**: ChatGPT non propone mai `std::print`/`std::println` (0/6 snippet); Claude lo propone come fix primario quando appropriato (4/6); determinismo Claude > ChatGPT sui primi 5 snippet.
+  - **Pattern stabili**: ChatGPT non propone mai `std::print`/`std::println` come fix primario (0/6 snippet, solo come alternativa C++23 condizionale); Claude lo propone come fix primario quando appropriato (4/6); determinismo Claude > ChatGPT sui primi 5 snippet.
   - **Bonus inatteso**: gli LLM trovano bug fuori scope del check ma reali (troncamento `2.5 → 2` snippet 04, `%s` con `nullptr` UB snippet 05) — conferma "complementarità", non "sostituibilità".
 
 - [x] **Lit test via build farm** ✅ FATTO 2026-05-04
@@ -92,7 +92,7 @@ Seguire `study_method/STUDY_PLAN.md`. Riassunto:
 
 ## 📅 Timeline aggiornata
 
-Da oggi (2026-05-04) all'esame, ipotizzando seminario a fine giugno + orale luglio:
+Da oggi (2026-05-05) all'esame, ipotizzando seminario a fine giugno + orale luglio:
 
 | Settimana | Focus |
 |-----------|-------|

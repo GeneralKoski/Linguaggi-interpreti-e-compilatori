@@ -1,4 +1,4 @@
-# Output reale del check `misc-no-printf` (run del 2026-05-04)
+# Output reale del check `misc-no-printf` (run del 2026-05-04, confronto LLM del 2026-05-05)
 
 Build: LLVM 23.0.0git, Apple Silicon, Release con assertions OFF.
 
@@ -66,7 +66,7 @@ Il check usa `callExpr(callee(functionDecl(hasName("::printf"))))` e lavora sull
 
 ### Pattern stabili emersi (osservazioni vere su 24 run)
 
-1. **ChatGPT 5.5 non propone mai `std::print`/`std::println`** (0/6 snippet). Propone `std::cout`/`std::printf`/`std::puts`/`std::format`/`std::fputs`. Claude Opus 4.7 lo propone come fix primario quando appropriato (4/6 snippet).
+1. **ChatGPT 5.5 non propone mai `std::print`/`std::println` come fix primario** (0/6 snippet). Lo menziona occasionalmente come ultima alternativa C++23 condizionale. I fix raccomandati sono `std::cout`/`std::printf`/`std::puts`/`std::format`/`std::fputs`. Claude Opus 4.7 lo propone come fix primario quando appropriato (4/6 snippet).
 2. **Determinismo Claude > ChatGPT** sui primi 5 snippet. Claude propone fix consistenti tra chat fresche; ChatGPT varia (`std::cout` vs `std::puts`, `concept Streamable` vs overload espliciti).
 3. **Su snippet 06, entrambi i modelli rompono il determinismo**: 50/50 sul finding più importante del file.
 

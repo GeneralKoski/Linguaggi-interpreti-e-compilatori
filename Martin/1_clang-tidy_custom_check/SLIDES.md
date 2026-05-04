@@ -154,7 +154,7 @@ clang-tidy -checks='-*,misc-no-printf' snippets/06_using_template_alias.cpp
 | | clang-tidy | Claude | ChatGPT |
 |---|---|---|---|
 | Determinismo | 100% | alto su 5/6 | medio |
-| Fix-it = `std::print` (C++23) | sì | 4/6 | **0/6** |
+| Fix-it primaria = `std::print` (C++23) | sì | 4/6 | **0/6** |
 | Snippet 06 (overload resolution) | 1 hit deterministico | 1ª ✓ / 2ª ✗ | 1ª ✗ / 2ª ✓ |
 | Bug semantico fuori scope (`2.5→2`) | non visto | trovato ⭐ | trovato ⭐ |
 

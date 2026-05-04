@@ -91,4 +91,4 @@ Bilancio combinato dei 4 run su snippet 06:
 
 Per la slide: "Quattro chat fresche, due modelli, lo stesso prompt: 50/50 sul finding più importante. clang-tidy: 100% deterministico, sempre 1 hit nello stesso punto."
 
-Inoltre, conferma il pattern stabile da snippet 01: ChatGPT non propone mai `std::print`/`std::println` (6/6 snippet).
+Inoltre, conferma il pattern stabile da snippet 01: ChatGPT non propone mai `std::print`/`std::println` come fix primario (6/6 snippet).

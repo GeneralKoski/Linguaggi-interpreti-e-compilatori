@@ -103,6 +103,6 @@
 **Bonus interessante:** ChatGPT trova il **bug del nullptr** (riga 8) — `%s` con `nullptr` è UB. Claude in questo snippet NON l'ha individuato. È il primo finding "ChatGPT > Claude" su un bug reale fuori dal mandato del check.
 
 Per la slide: entrambi i modelli passano il test di scope, quindi su questa trappola specifica non c'è il "wow moment" sognato. Ma:
-1. Conferma il pattern stabile: ChatGPT non propone mai `std::print`/`std::println` (5/5 snippet finora);
+1. Conferma il pattern stabile: ChatGPT non propone mai `std::print`/`std::println` come fix primario (5/5 snippet finora);
 2. ChatGPT trova un bug reale che Claude perde (nullptr → UB);
 3. Determinismo: Claude alto, ChatGPT medio (pattern stabile).

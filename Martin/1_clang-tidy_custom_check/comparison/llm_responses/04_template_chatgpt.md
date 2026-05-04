@@ -86,7 +86,7 @@
 ## Verdetto sintetico
 
 ChatGPT trova il bug semantico vero (`2.5 → 2`) come Claude, e propone fix che eliminano il `printf`. Conferma in modo netto i due pattern stabili da snippet 01:
-1. **Mai `std::print`/`std::println`** (4/4 snippet finora);
+1. **Mai `std::print`/`std::println` come fix primario** (4/4 snippet finora);
 2. **Determinismo medio**: in questo snippet, la 1ª chat propone concept `Streamable`, la 2ª invece overload espliciti per `int`/`double`. Sono soluzioni qualitativamente diverse, non solo cosmeticamente.
 
 Per la slide: "ChatGPT raggiunge la sostanza ma con percorsi diversi tra esecuzioni — clang-tidy invece applica esattamente la stessa fix-it ogni volta".

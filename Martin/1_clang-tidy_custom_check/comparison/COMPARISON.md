@@ -85,7 +85,7 @@ ma instabile sul finding chiave proprio dove la precisione conta di più.
 - **Spiegazione contestuale**: l'LLM sa *perché* `printf` è sconsigliato in C++ moderno e propone alternative.
 
 **Pattern stabili emersi (osservazioni vere, non opinioni):**
-1. **ChatGPT 5.5 non propone mai `std::print`/`std::println`** (0/6 snippet). Propone `std::cout`/`std::printf`/`std::puts`/`std::format`/`std::fputs`. Claude Opus 4.7 lo propone come fix primario quando appropriato (4/6 snippet).
+1. **ChatGPT 5.5 non propone mai `std::print`/`std::println` come fix primario** (0/6 snippet). Lo menziona occasionalmente come ultima alternativa C++23 condizionale (snippet 02, 03, 04 — solo in alcune delle 2 chat). I fix raccomandati sono `std::cout`/`std::printf`/`std::puts`/`std::format`/`std::fputs`. Claude Opus 4.7 lo propone come fix primario quando appropriato (4/6 snippet).
 2. **Determinismo Claude > ChatGPT** sui primi 5 snippet (Claude propone fix consistenti tra chat fresche, ChatGPT varia: `std::cout` vs `std::puts`, `concept Streamable` vs overload, ecc.).
 3. **Su snippet 06 (overload resolution), entrambi i modelli falliscono il determinismo**: 2 su 4 run interpretano correttamente l'AST post-resolution, 2 su 4 no. 50/50 sul finding più importante del file.
 
