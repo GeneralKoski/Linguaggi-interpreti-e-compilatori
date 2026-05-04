@@ -45,11 +45,13 @@ Stima totale residua: **~22-26h**.
 - [ ] Provare la demo cronometrata **almeno 5 volte**, target 4-5 min per la sezione "demo live"
 - [ ] **Piano B**: registrare un video da 2'30" come backup (QuickTime + zoom)
 
-### Script verbale (~2h)
-- [ ] Scrivere 1-2 frasi chiave per ogni slide
-- [ ] Frase di apertura forte (15 secondi)
-- [ ] Frase di chiusura forte (15 secondi)
-- [ ] Identificare le transizioni ("Detto questo...", "Vediamo ora...")
+### Script verbale (~2h) — **fatto 2026-05-05**
+- [x] `SCRIPT.md` con frasi pivot per ogni slide (tono tecnico-fluido)
+- [x] Apertura forte (~15s) e chiusura forte (~15s)
+- [x] Transizioni esplicitate slide → slide
+- [x] Q&A: 6 domande probabili + risposte preparate
+- [x] Note operative su velocità lettura, pause, gestione tempi, cose da NON dire
+- [ ] **Pratica orale:** leggere ad alta voce 2-3 volte, cronometrando, per memorizzare i punti pivot
 
 ### Logistica (~1h)
 - [ ] **Mail al prof** per fissare data tentativa (preavviso 30 giorni!)

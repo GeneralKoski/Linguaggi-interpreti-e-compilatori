@@ -45,10 +45,8 @@ Cosa scrivere:
 - Provare la demo **almeno 5 volte**, target 4-5 min per la sezione "demo live"
 - **Piano B**: registrare un video da 2'30" (QuickTime) come backup se la live si rompe
 
-### 5. Script verbale (~2h)
-- 1-2 frasi chiave per ogni slide
-- Apertura forte (15s) + chiusura forte (15s)
-- Transizioni ("Detto questo...", "Vediamo ora...")
+### ~~5. Script verbale~~ ✅ FATTO 2026-05-05
+`Martin/1_clang-tidy_custom_check/SCRIPT.md`: frasi pivot tecnico-fluide per ogni slide, apertura/chiusura forte, transizioni esplicite, Q&A con 6 domande probabili + risposte preparate, note operative. Resta solo la pratica a voce alta (2-3 volte cronometrate).
 
 ### 6. Studio orale dei 9 capitoli (~10-12h)
 Seguire `study_method/STUDY_PLAN.md`:

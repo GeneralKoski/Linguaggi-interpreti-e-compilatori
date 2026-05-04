@@ -96,6 +96,64 @@ expr: expr '+' expr     { $$ = make_add($1, $3); }
 %type <node> expr stmt
 ```
 
+### Precedenza e associatività
+Da scrivere **dopo** `%token`, prima della grammatica. La **precedenza** cresce dall'alto verso il basso; l'**associatività** è specificata dalla direttiva.
+```
+%left  '+' '-'        // bassa precedenza, associatività sinistra
+%left  '*' '/'        // più alta
+%right '^'            // associatività destra (es. potenza)
+%nonassoc '<' '>' '=='  // non associativo (a < b < c è errore)
+```
+Bison usa queste informazioni per **risolvere automaticamente** i conflitti shift-reduce su grammatiche con operatori binari. Se la precedenza dell'operatore è maggiore di quella del lookahead → reduce; se minore → shift; se uguale → applica l'associatività.
+
+### Token fittizi e `%prec`
+Servono quando una **produzione** ha bisogno di una precedenza diversa da quella del suo token più a destra. Caso classico: meno unario.
+```
+%left  '+' '-'
+%left  '*' '/'
+%nonassoc UMINUS         // token fittizio: dichiarato ma mai prodotto dal lexer
+
+%%
+expr: expr '+' expr
+    | expr '-' expr
+    | expr '*' expr
+    | expr '/' expr
+    | '-' expr  %prec UMINUS    // forza la precedenza di UMINUS qui
+    | NUM
+    ;
+```
+Senza `%prec UMINUS`, `-x*y` parserebbe come `-(x*y)` (precedenza del `-` binario, bassa). Con `%prec UMINUS` → `(-x)*y` come ci si aspetta.
+
+### Error recovery
+Bison ha un meccanismo basato sul **token speciale `error`**. La produzione che lo usa "consuma" l'errore e permette al parser di proseguire.
+```
+stmt: expr ';'
+    | error ';'         // su errore, salta fino a ';' e riprende
+    ;
+```
+Comportamento: quando il parser incontra un input non valido:
+1. Chiama `yyerror(const char* msg)` (definita dall'utente)
+2. Cerca uno stato in cui `error` è valido → fa shift di `error`
+3. Salta token in input fino a che non riesce a fare un'azione valida
+4. Resetta il flag di errore con `yyerrok` (esplicito o dopo 3 shift consecutivi)
+
+`yyerror` di default stampa `"syntax error"`; tipicamente la si sovrascrive per dare diagnostica utile (riga, contesto).
+
+### Output di Bison
+```bash
+bison --report=all --defines=parser.hh -o parser.cc parser.yy
+```
+- `parser.cc` (o `.c`) — la routine `yyparse()` con tabelle ACTION/GOTO compilate
+- `parser.hh` — dichiarazioni dei token, `yylval`, signature di `yylex`/`yyerror` (incluso da Flex)
+- `parser.output` (con `--report=all`) — **file diagnostico**: stati LR, item set, conflitti, transizioni. Indispensabile per debuggare i conflitti shift-reduce/reduce-reduce.
+
+### Pseudo-pattern Flex `<<EOF>>`
+Permette di eseguire un'azione speciale a fine file. Utile per gestire file inclusi, validare uno stato non chiuso (es. commento aperto a EOF), o forzare un token finale.
+```
+<COMMENTO><<EOF>>   { yyerror("commento non chiuso"); yyterminate(); }
+<INITIAL><<EOF>>    { return TOK_EOF; }
+```
+
 ---
 
 ## Clang/LLVM

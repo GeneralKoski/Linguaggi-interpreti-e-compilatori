@@ -51,6 +51,47 @@ In **parsing**, i formalismi (CFG, LL/LR) hanno vinto. Nella **CSA** dominano le
 - Esempio di SDT: `Expr → Expr + Term  { $$ = F+($1, $3) }`
 - L'intera analisi tipica produce un **AST arricchito** con tipo, scope, conversioni implicite
 
+### Esempio di propagazione tipi su `(a + b) * c`
+Sia `a: int`, `b: float`, `c: int`. Tabella `F+`:
+```
+F+      | int   | float
+--------+-------+-------
+int     | int   | float    (con promozione implicita int→float)
+float   | float | float
+```
+Tabella `F*` analoga.
+
+Parser bottom-up, riduzioni nell'ordine in cui escono dallo shift-reduce. Per ogni nodo dell'AST associo un attributo `.type` e (eventualmente) `.coerce` (cast da inserire).
+
+```
+1. atom 'a' (int)         → Expr.type = int
+2. atom 'b' (float)       → Expr.type = float
+3. Expr1 + Expr2:
+     F+(int, float) = float
+     → Expr.type = float
+     → su Expr1 inserisci coercion int → float (es. nodo Cast in AST)
+4. atom 'c' (int)          → Expr.type = int
+5. Expr3 * Expr4:
+     F*(float, int) = float
+     → Expr.type = float
+     → su Expr4 inserisci coercion int → float
+```
+
+AST risultante (arricchito):
+```
+       *  : float
+      / \
+     +    Cast(int→float) : float
+   : float          \
+   /     \           c : int
+  Cast    b
+ (int→fl) : float
+   |
+   a : int
+```
+
+L'output dell'analisi semantica statica non è solo "ok / non ok": è un AST in cui ogni nodo ha tipo, e i cast impliciti del linguaggio sono diventati nodi espliciti che il middle end potrà ottimizzare o tradurre in IR.
+
 ---
 
 ## TinyP — il mini compilatore di esempio
