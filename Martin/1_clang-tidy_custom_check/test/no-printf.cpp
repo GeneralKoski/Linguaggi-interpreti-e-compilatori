@@ -4,12 +4,12 @@ extern "C" int printf(const char *fmt, ...);
 
 void caller() {
   printf("hello %d\n", 42);
-  // CHECK-MESSAGES: :[[@LINE-1]]:3: warning: uso di 'printf' sconsigliato in C++ moderno; usare 'std::print' [misc-no-printf]
+  // CHECK-MESSAGES: :[[@LINE-1]]:3: warning: uso di 'printf' sconsigliato in C++ moderno
   // CHECK-FIXES: std::print("hello %d\n", 42);
 
   int x = 1;
   printf("%d", x);
-  // CHECK-MESSAGES: :[[@LINE-1]]:3: warning: uso di 'printf'
+  // CHECK-MESSAGES: :[[@LINE-1]]:3: warning: uso di 'printf' sconsigliato in C++ moderno
   // CHECK-FIXES: std::print("%d", x);
 }
 

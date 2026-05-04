@@ -12,12 +12,10 @@ Stima totale residua: **~30-35h**.
   - Annotare in `comparison/COMPARISON.md` cosa l'LLM dice davvero (la tabella attuale è predittiva)
   - Identificare almeno **1 caso dove l'LLM sbaglia** (probabile: snippet 02 namespace o snippet 03 macro) per usarlo come punto di forza in slide
 
-- [ ] **Lit test via build farm** (30 min)
-  ```bash
-  cp test/no-printf.cpp ~/llvm-project/clang-tools-extra/test/clang-tidy/checkers/misc/
-  ninja -C ~/llvm-project/build check-clang-tools
-  ```
-  Verificare che `no-printf` passi tra i test ufficiali
+- [x] **Lit test via build farm** ✅ FATTO 2026-05-04
+  - `FileCheck` buildato, test copiato in `clang-tools-extra/test/clang-tidy/checkers/misc/`
+  - `CLANG=/usr/bin/clang llvm-lit ... -v` → `PASS (1 of 1)` in 0.27s
+  - Pattern `CHECK-MESSAGES` raccorciato per matchare il prefisso del messaggio (la nota `(richiede ...)` interrompeva la corrispondenza esatta col tag `[misc-no-printf]`)
 
 - [ ] **Run su progetto open source reale** (2-3h, suggerimento prof)
   - Candidati leggeri (build veloce, non gigante): `tinyxml2`, `nlohmann/json` (solo header → niente Bear, ma puoi creare un wrapper), un mini tool C++ tipo `cpp-httplib` con esempio
