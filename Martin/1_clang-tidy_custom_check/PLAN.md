@@ -4,12 +4,24 @@ Tre fasi: **progetto tecnico** → **presentazione** → **preparazione orale**.
 
 ---
 
-## ✅ Stato attuale (2026-05-04)
+## ✅ Stato attuale (2026-05-04, post-build)
 
-- Argomento confermato dal prof, scope invariato
-- Toolchain locale: `clang` ok (Apple), **mancano** `ninja`, `bear`, `llvm-project` clone, build di `clang-tidy`
-- Nessun codice del check ancora scritto
-- Prossimo passo concreto: Step 1.1 (setup ambiente)
+**Fase 1 (tecnica) ~90% fatta:**
+- ✅ Argomento confermato dal prof, scope invariato
+- ✅ Toolchain: `clang`, `ninja`, `bear`, `cmake` installati
+- ✅ `llvm-project` clonato, configurato e buildato (`clang-tidy` 23.0.0git pronto)
+- ✅ Check `misc-no-printf` scritto, installato, ricompilato e testato
+- ✅ 3 hit su `demo/bad.cpp`, 0 su `demo/good.cpp`
+- ✅ 4 snippet di confronto + tabella in `comparison/COMPARISON.md` (predittiva, da validare con LLM reale)
+- ✅ `bear_demo/`: `bear -- make` → `compile_commands.json` → 5/5 hit reali
+- ✅ Bozza `SLIDES.md` (13 slide, 15 min)
+- ⏳ **Mancano**: confronto LLM reale, run su libreria open source vera, lit test via `ninja check-clang-tools`
+
+**Fase 2 (presentazione) ~5% fatta:** solo outline testuale, slide vere non ancora prodotte.
+
+**Fase 3 (orale) 0% fatta:** vedi `study_method/STUDY_PLAN.md`.
+
+Per la lista completa e azionabile delle cose mancanti vedi **`TODO.md`** in questa cartella.
 
 ---
 
