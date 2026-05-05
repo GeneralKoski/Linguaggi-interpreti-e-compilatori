@@ -1,0 +1,1 @@
+../notes/04_domande_tipo.md

@@ -1,6 +1,9 @@
 # TODO — esame Linguaggi, Interpreti e Compilatori
 
 Stato: 2026-05-05.
+
+> **Per studiare:** entry point unico in [`study/`](study/README.md). 8 blocchi numerati nell'ordine in cui vanno affrontati.
+
 Per il dettaglio del lavoro tecnico già fatto vedi `Martin/1_clang-tidy_custom_check/{PLAN,TODO,RESULTS}.md`.
 
 ---

@@ -1,0 +1,1 @@
+../Martin/1_clang-tidy_custom_check/SCRIPT.md
